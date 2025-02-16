@@ -47,7 +47,12 @@ class SupportUsCard extends StatelessWidget {
           SizedBox(height: 12.h),
           GestureDetector(
             onTap: () {
-              Get.toNamed(AppRoutes.pembayaranPay);
+              Get.toNamed(
+                AppRoutes.pembayaranPay,
+                arguments: {
+                  'tipe': 'Support',
+                },
+              );
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

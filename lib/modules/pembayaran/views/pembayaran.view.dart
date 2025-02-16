@@ -6,9 +6,12 @@ import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
 import 'package:pushbike_app/core/constants/color_const.dart';
 import 'package:pushbike_app/core/routes/app_routes.dart';
+import 'package:pushbike_app/core/widget/custom_shimmer_widget.dart';
 import 'package:pushbike_app/core/widget/custom_tabbar_widget.dart';
 import 'package:pushbike_app/core/widget/general_app_bar_widget.dart';
+import 'package:pushbike_app/core/widget/general_empty_error_widget.dart';
 import 'package:pushbike_app/modules/pembayaran/controllers/pembayaran.controller.dart';
+import 'package:pushbike_app/modules/pembayaran/models/membership_model.dart';
 import 'package:pushbike_app/modules/pembayaran/views/components/membership_card_component.dart';
 import 'package:pushbike_app/modules/pembayaran/views/components/support_us_card.dart';
 
@@ -28,13 +31,53 @@ class PembayaranView extends StatelessWidget {
             child: TabBarView(
               controller: controller.tabController,
               children: [
-                _buildMembershipList(controller),
+                Obx(
+                  () =>
+                      controller.membershipState.value.whenOrNull(
+                        success: (data) => _buildMembershipList(data),
+                        loading: () => _buildLoadingList(),
+                        empty: (message) => SizedBox(
+                          width: 1.sw,
+                          child: GeneralEmptyErrorWidget(
+                            descText: message,
+                            onRefresh: controller.getMembershipList,
+                            isCentered: true,
+                          ),
+                        ),
+                        error: (message) => SizedBox(
+                          width: 1.sw,
+                          child: GeneralEmptyErrorWidget(
+                            descText: message,
+                            onRefresh: controller.getMembershipList,
+                            isCentered: true,
+                          ),
+                        ),
+                      ) ??
+                      const SizedBox.shrink(),
+                ),
                 _buildSupportUsSection(),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLoadingList() {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 10,
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: CustomShimmerWidget.buildShimmerWidget(
+          width: double.infinity,
+          height: 180.h,
+          radius: 16.r,
+        ),
+      ),
+      separatorBuilder: (context, index) => const SizedBox.shrink(),
     );
   }
 
@@ -48,25 +91,31 @@ class PembayaranView extends StatelessWidget {
     );
   }
 
-  Widget _buildMembershipList(PembayaranController controller) {
-    return ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: controller.memberships.length,
-      itemBuilder: (context, index) {
-        final memberships = controller.memberships;
-        return GestureDetector(
-          onTap: () {
-            Get.toNamed(
-              AppRoutes.pembayaranDetail,
-              arguments: memberships[index],
-            );
-          },
-          child: MembershipCardComponent(
-            membership: memberships[index],
-          ),
-        );
+  Widget _buildMembershipList(List<MembershipModel> memberships) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        await PembayaranController.to.getMembershipList();
       },
-      separatorBuilder: (context, index) => const SizedBox(height: 16),
+      child: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: memberships.length,
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          final membership = memberships[index];
+          return GestureDetector(
+            onTap: () {
+              Get.toNamed(
+                AppRoutes.pembayaranDetail,
+                arguments: memberships[index],
+              );
+            },
+            child: MembershipCardComponent(
+              membership: membership,
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(height: 16),
+      ),
     );
   }
 
@@ -100,7 +149,12 @@ class PembayaranView extends StatelessWidget {
           SizedBox(height: 36.h),
           ElevatedButton(
             onPressed: () {
-              Get.toNamed(AppRoutes.pembayaranPay);
+              Get.toNamed(
+                AppRoutes.pembayaranPay,
+                arguments: {
+                  'tipe': 'Support',
+                },
+              );
             },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),

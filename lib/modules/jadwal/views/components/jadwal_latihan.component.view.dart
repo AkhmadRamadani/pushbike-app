@@ -8,6 +8,7 @@ import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
 import 'package:pushbike_app/core/constants/color_const.dart';
 import 'package:pushbike_app/core/extensions/date_extensions.dart';
+import 'package:pushbike_app/core/widget/custom_shimmer_widget.dart';
 import 'package:pushbike_app/core/widget/separator_widget.dart';
 import 'package:pushbike_app/modules/jadwal/controllers/jadwal.controller.dart';
 import 'package:pushbike_app/modules/jadwal/models/responses/get_event_calendar.response.model.dart';
@@ -28,10 +29,22 @@ class JadwalLatihanView extends StatelessWidget {
         children: [
           SizedBox(height: 12.h),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
-                _buildPointsReminder(),
+                SizedBox(height: 8.h),
+                Obx(
+                  () =>
+                      controller.pointData.value.whenOrNull(
+                        success: (data) => _buildPointsReminder(data),
+                        loading: () => CustomShimmerWidget.buildShimmerWidget(
+                          width: double.infinity,
+                          height: 40.h,
+                          radius: 50.r,
+                        ),
+                      ) ??
+                      const SizedBox(),
+                ),
                 SizedBox(height: 16.h),
                 _buildCalendarHeader(),
                 SizedBox(height: 16.h),
@@ -73,7 +86,7 @@ class JadwalLatihanView extends StatelessWidget {
     );
   }
 
-  Widget _buildPointsReminder() {
+  Widget _buildPointsReminder(PointModel point) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(8),
@@ -90,7 +103,7 @@ class JadwalLatihanView extends StatelessWidget {
                 style: AppTextStyles.caption12Regular,
               ),
               TextSpan(
-                text: "+10 Poin ",
+                text: "+${point.poin ?? 0} Poin ",
                 style: AppTextStyles.caption12Semibold.copyWith(
                   fontWeight: FontWeight.w600,
                   color: ColorConst.blueText,
@@ -151,6 +164,7 @@ class JadwalLatihanView extends StatelessWidget {
               firstDay: controller.firstDay,
               lastDay: controller.lastDay,
               headerVisible: false,
+              availableGestures: AvailableGestures.none,
               startingDayOfWeek: StartingDayOfWeek.monday,
               onDaySelected: controller.onDaySelected,
               calendarBuilders: CustomCalendarBuilder.create(event: data),
@@ -161,6 +175,7 @@ class JadwalLatihanView extends StatelessWidget {
             firstDay: controller.firstDay,
             lastDay: controller.lastDay,
             headerVisible: false,
+            availableGestures: AvailableGestures.none,
             startingDayOfWeek: StartingDayOfWeek.monday,
             calendarBuilders: CustomCalendarBuilder.create(
               event: List.generate(

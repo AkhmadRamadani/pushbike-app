@@ -13,6 +13,9 @@ import 'package:pushbike_app/modules/level/controllers/level.controller.dart';
 import 'package:pushbike_app/modules/level/views/level.view.dart';
 import 'package:pushbike_app/modules/authentication/features/login/controllers/login.controller.dart';
 import 'package:pushbike_app/modules/authentication/features/login/views/login.view.dart';
+import 'package:pushbike_app/modules/modul/controllers/modul.controller.dart';
+import 'package:pushbike_app/modules/modul/views/ui/modul.view.dart';
+import 'package:pushbike_app/modules/pembayaran/controllers/detail_pembayaran.controller.dart';
 import 'package:pushbike_app/modules/pembayaran/controllers/pembayaran.controller.dart';
 import 'package:pushbike_app/modules/pembayaran/views/detail_pembayaran.view.dart';
 import 'package:pushbike_app/modules/pembayaran/views/pembayaran.view.dart';
@@ -93,6 +96,11 @@ class GetPages {
       GetPage(
         name: AppRoutes.pembayaranDetail,
         page: () => const DetailPembayaranView(),
+        binding: BindingsBuilder(
+          () {
+            Get.lazyPut(() => DetailPembayaranController());
+          },
+        ),
       ),
       GetPage(
         name: AppRoutes.pembayaranRiwayat,
@@ -108,6 +116,15 @@ class GetPages {
         binding: BindingsBuilder(
           () {
             Get.lazyPut(() => JadwalController());
+          },
+        ),
+      ),
+      GetPage(
+        name: AppRoutes.modul,
+        page: () => const ModulView(),
+        binding: BindingsBuilder(
+          () {
+            Get.lazyPut(() => ModulController());
           },
         ),
       ),

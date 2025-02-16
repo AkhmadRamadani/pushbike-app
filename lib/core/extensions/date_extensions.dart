@@ -32,6 +32,10 @@ extension DateExtension on DateTime {
     return DateFormat('MMM yyyy', locale).format(this);
   }
 
+  String toReadableMonth(){
+    return DateFormat('MMMM', locale).format(this);
+  }
+
   int getLastDayOfMonth() {
     return DateTime(year, month + 1, 0).day;
   }
@@ -39,6 +43,11 @@ extension DateExtension on DateTime {
 
   String toDayMonthYearString() {
     return DateFormat('dd MMM yyyy', locale).format(this);
+  }
+
+  // 01 Okt 2024, 15:10
+  String toDayMonthYearHourMinuteString() {
+    return DateFormat('dd MMM yyyy, HH:mm', locale).format(this);
   }
 
   int getAge() {

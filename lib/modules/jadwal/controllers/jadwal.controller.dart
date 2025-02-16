@@ -19,6 +19,7 @@ class JadwalController extends GetxController
       const UIState<List<CalendarEvent>>.idle().obs;
   Rx<UIState<List<DatumEventCalendar>>> ujianData =
       const UIState<List<DatumEventCalendar>>.idle().obs;
+  Rx<UIState<PointModel>> pointData = const UIState<PointModel>.idle().obs;
 
   DatumEventCalendar? selectedEvent;
 
@@ -38,6 +39,7 @@ class JadwalController extends GetxController
 
   Future<void> getEventCalendar() async {
     eventCalendar.value = const UIState.loading();
+    pointData.value = const UIState.loading();
     try {
       final response =
           await jadwalRepository.getCalendarEvent(date: focusedDay);
@@ -45,13 +47,20 @@ class JadwalController extends GetxController
           response.data != null &&
           response.data!.event != null) {
         eventCalendar.value = UIState.success(data: response.data!.event!);
+        pointData.value = UIState.success(
+          data: response.data!.point!,
+        );
       } else {
         eventCalendar.value = UIState.error(
+          message: response.message ?? 'Failed to fetch event calendar.',
+        );
+        pointData.value = UIState.error(
           message: response.message ?? 'Failed to fetch event calendar.',
         );
       }
     } catch (e) {
       eventCalendar.value = UIState.error(message: e.toString());
+      pointData.value = UIState.error(message: e.toString());
     }
   }
 

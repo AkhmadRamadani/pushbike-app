@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
 import 'package:pushbike_app/core/constants/color_const.dart';
 import 'package:pushbike_app/core/helpers/general_helper.dart';
+import 'package:pushbike_app/core/widget/custom_shimmer_widget.dart';
 import 'package:pushbike_app/core/widget/general_app_bar_widget.dart';
+import 'package:pushbike_app/modules/pembayaran/controllers/pembayaran_pay.controller.dart';
 
 class PembayaranPayView extends StatelessWidget {
   const PembayaranPayView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(PembayaranPayController());
     return Scaffold(
       appBar: const GeneralAppBarWidget(
         title: 'Pembayaran',
@@ -30,39 +34,70 @@ class PembayaranPayView extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                "Bank BCA",
-                style: AppTextStyles.title16Regular.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+              Obx(
+                () =>
+                    controller.dataRekening.value.whenOrNull(
+                      success: (data) => Text(
+                        "Bank ${data.kategoriBank ?? ''}",
+                        style: AppTextStyles.title16Regular.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      loading: () => CustomShimmerWidget.buildShimmerWidget(
+                        width: 200.w,
+                        height: 24.h,
+                      ),
+                    ) ??
+                    const SizedBox(),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Nomor Rekening: 123456789",
-                    style: AppTextStyles.title16Regular.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  GestureDetector(
-                    onTap: () {
-                      GeneralHelper.copyToClipboard("123456789");
-                    },
-                    child: Iconify(
-                      MaterialSymbols.copy_all_rounded,
-                      size: 16.sp,
-                      color: ColorConst.blue100,
-                    ),
-                  ),
-                ],
+              Obx(
+                () =>
+                    controller.dataRekening.value.whenOrNull(
+                      success: (data) => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Nomor Rekening: ${data.nomorRekening ?? ''}",
+                            style: AppTextStyles.title16Regular.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          GestureDetector(
+                            onTap: () {
+                              GeneralHelper.copyToClipboard(
+                                  data.nomorRekening ?? '');
+                            },
+                            child: Iconify(
+                              MaterialSymbols.copy_all_rounded,
+                              size: 16.sp,
+                              color: ColorConst.blue100,
+                            ),
+                          ),
+                        ],
+                      ),
+                      loading: () => CustomShimmerWidget.buildShimmerWidget(
+                        width: 200.w,
+                        height: 24.h,
+                      ),
+                    ) ??
+                    const SizedBox(),
               ),
-              Text(
-                "Atas Nama: Ammar",
-                style: AppTextStyles.title16Regular.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+              Obx(
+                () =>
+                    controller.dataRekening.value.whenOrNull(
+                      success: (data) => Text(
+                        "Atas Nama: ${data.nama ?? ''}",
+                        style: AppTextStyles.title16Regular.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      loading: () => CustomShimmerWidget.buildShimmerWidget(
+                        width: 200.w,
+                        height: 24.h,
+                      ),
+                    ) ??
+                    const SizedBox(),
               ),
             ],
           ),
@@ -74,33 +109,59 @@ class PembayaranPayView extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12.h),
-          Container(
-            height: 312.w,
-            width: 312.w,
-            decoration: BoxDecoration(
-              color: ColorConst.blue50,
-              borderRadius: BorderRadius.circular(16.r),
-            ),
-            padding: const EdgeInsets.all(32),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Center(
-                child: Iconify(
-                  MaterialSymbols.qr_code,
-                  size: 240.sp,
-                  color: ColorConst.textColour90,
-                ),
-              ),
-            ),
+          Obx(
+            () =>
+                controller.dataRekening.value.whenOrNull(
+                  success: (data) => Container(
+                    height: 312.w,
+                    width: 312.w,
+                    decoration: BoxDecoration(
+                      color: ColorConst.blue50,
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    padding: const EdgeInsets.all(32),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      child: Center(
+                        child: Image.network(
+                          data.uploadQris ?? '',
+                          width: 200.w,
+                          height: 200.w,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.broken_image,
+                              color: Colors.red,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  loading: () => CustomShimmerWidget.buildShimmerWidget(
+                    width: 312.w,
+                    height: 312.w,
+                    radius: 16.r,
+                  ),
+                ) ??
+                const SizedBox(),
           ),
           SizedBox(height: 24.h),
           _buildAdditionalInfo(),
           SizedBox(height: 32.h),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              controller.dialogAskPostPembayaran();
+            },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
               shape: RoundedRectangleBorder(

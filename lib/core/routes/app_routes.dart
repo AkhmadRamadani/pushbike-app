@@ -17,4 +17,6 @@ class AppRoutes {
   static const String pembayaranPay = '/pembayaran/pay';
 
   static const String jadwal = '/jadwal';
+
+  static const String modul = '/modul';
 }

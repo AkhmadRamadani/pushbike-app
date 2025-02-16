@@ -93,10 +93,10 @@ class Data {
         isRead: json["is_read"],
         updatedAt: json["updated_at"] == null
             ? null
-            : DateTime.parse(json["updated_at"]),
+            : DateTime.tryParse(json["updated_at"]),
         createdAt: json["created_at"] == null
             ? null
-            : DateTime.parse(json["created_at"]),
+            : DateTime.tryParse(json["created_at"]),
         id: json["id"],
         pengumuman: json["pengumuman"] == null
             ? null

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pushbike_app/core/constants/color_const.dart';
 import 'package:pushbike_app/core/db/local_user_data.dart';
 import 'package:pushbike_app/core/services/local_db.service.dart';
+import 'package:pushbike_app/core/state/ui_state_model/ui_state_model.dart';
 import 'package:pushbike_app/modules/pembayaran/models/membership_model.dart';
+import 'package:pushbike_app/modules/pembayaran/repositories/pembayaran.repository.dart';
 
 class PembayaranController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -12,60 +13,40 @@ class PembayaranController extends GetxController
 
   LocalUserData? localUserData;
 
-  final List<MembershipModel> memberships = [
-    MembershipModel(
-      title: 'Reguler Membership',
-      price: 'IDR 100.000',
-      description: 'Anda saat ini sedang terdaftar di reguler member',
-      isCurrent: true,
-      hasTerms: true,
-      gradient: ColorConst.gradientGreen,
-      icon: Icons.verified_user_rounded,
-      terms: [
-        'Memiliki sepeda pushbike dengan ukuran roda 12” tanpa pedal',
-        'Memiliki helm standard pushbike',
-        'Disarankan memiliki pelindung keamanan tambahan seperti pelindung lutut dan siku',
-        'Melakukan registrasi awal kepada admin SCR Kids secara offline',
-        'Mendapatkan ID dan Password dari admin SCR Kids',
-        'Mengikuti latihan rutin SCR Kids',
-        'Mematuhi segala peraturan yang telah ditetapkan oleh pihak official SCR Kids',
-      ],
-      errorText: "Maksimal batas pembayaran bulanan H+3",
-    ),
-    MembershipModel(
-      title: 'Plus Membership',
-      price: 'IDR 250.000',
-      description: '',
-      isCurrent: false,
-      hasTerms: true,
-      gradient: ColorConst.gradientYellow,
-      icon: Icons.info_rounded,
-      terms: [
-        'Memiliki sepeda pushbike dengan ukuran roda 14” tanpa pedal',
-        'Memiliki helm dan pelindung lengkap',
-        'Melakukan registrasi secara online',
-        'Mendapatkan fasilitas pelatihan tambahan',
-      ],
-      errorText: "Anda belum memenuhi syarat. Silahkan cek S&K",
-    ),
-    MembershipModel(
-        title: 'Pro Membership',
-        price: 'COMING SOON',
-        description: '',
-        isCurrent: false,
-        hasTerms: false,
-        gradient: const LinearGradient(
-          colors: [ColorConst.textColour20, ColorConst.textColour20],
-        ),
-        icon: Icons.info_rounded,
-        terms: [],
-        isComingSoon: true),
-  ];
+  PembayaranRepository repository = PembayaranRepository();
+
+  Rx<UIState<List<MembershipModel>>> membershipState =
+      const UIState<List<MembershipModel>>.idle().obs;
 
   @override
   void onInit() {
     tabController = TabController(length: 2, vsync: this);
     localUserData = LocalDbService.getUserLocalDataSync();
+    getMembershipList();
     super.onInit();
+  }
+
+  Future<void> getMembershipList() async {
+    membershipState.value = const UIState.loading();
+    try {
+      final response = await repository.getMembershipList();
+      if (response.statusCode == 200 &&
+          response.data != null &&
+          response.data!.data != null) {
+        List<MembershipModel> memberships = [];
+        for (var i = 0; i < response.data!.data!.length; i++) {
+          memberships
+              .add(MembershipModel.fromDataMembership(response.data!.data![i]));
+        }
+
+        membershipState.value = UIState.success(data: memberships);
+      } else {
+        membershipState.value = UIState.error(
+          message: response.message ?? 'Failed to fetch membership list.',
+        );
+      }
+    } catch (e) {
+      membershipState.value = UIState.error(message: e.toString());
+    }
   }
 }

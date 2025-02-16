@@ -15,16 +15,20 @@ String getCalendarEventResponseToJson(
 
 class GetCalendarEventResponseModel {
   List<CalendarEvent>? event;
+  PointModel? point;
 
   GetCalendarEventResponseModel({
     this.event,
+    this.point,
   });
 
   GetCalendarEventResponseModel copyWith({
     List<CalendarEvent>? event,
+    PointModel? point,
   }) =>
       GetCalendarEventResponseModel(
         event: event ?? this.event,
+        point: point ?? this.point,
       );
 
   factory GetCalendarEventResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -33,12 +37,14 @@ class GetCalendarEventResponseModel {
             ? []
             : List<CalendarEvent>.from(
                 json["event"]!.map((x) => CalendarEvent.fromJson(x))),
+        point: json["point"] == null ? null : PointModel.fromJson(json["point"]),
       );
 
   Map<String, dynamic> toJson() => {
         "event": event == null
             ? []
             : List<dynamic>.from(event!.map((x) => x.toJson())),
+        "point": point?.toJson(),
       };
 }
 
@@ -61,7 +67,7 @@ class CalendarEvent {
       );
 
   factory CalendarEvent.fromJson(Map<String, dynamic> json) => CalendarEvent(
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : DateTime.tryParse(json["date"]),
         data: json["data"] == null
             ? []
             : List<DatumEventCalendar>.from(
@@ -188,4 +194,73 @@ extension EventCategoryExtension on EventCategory {
         return null;
     }
   }
+}
+
+class PointModel {
+  int? id;
+  String? tipe;
+  dynamic mEventId;
+  dynamic podium;
+  String? kategori;
+  int? poin;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  PointModel({
+    this.id,
+    this.tipe,
+    this.mEventId,
+    this.podium,
+    this.kategori,
+    this.poin,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  PointModel copyWith({
+    int? id,
+    String? tipe,
+    dynamic mEventId,
+    dynamic podium,
+    String? kategori,
+    int? poin,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) =>
+      PointModel(
+        id: id ?? this.id,
+        tipe: tipe ?? this.tipe,
+        mEventId: mEventId ?? this.mEventId,
+        podium: podium ?? this.podium,
+        kategori: kategori ?? this.kategori,
+        poin: poin ?? this.poin,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
+
+  factory PointModel.fromJson(Map<String, dynamic> json) => PointModel(
+        id: json["id"],
+        tipe: json["tipe"],
+        mEventId: json["m_event_id"],
+        podium: json["podium"],
+        kategori: json["kategori"],
+        poin: json["poin"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.tryParse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.tryParse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "tipe": tipe,
+        "m_event_id": mEventId,
+        "podium": podium,
+        "kategori": kategori,
+        "poin": poin,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+      };
 }

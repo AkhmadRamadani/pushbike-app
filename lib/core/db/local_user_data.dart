@@ -227,7 +227,7 @@ class LocalRiderMembership {
     this.syaratKetentuan,
   });
 
-  factory LocalRiderMembership.fromMembership(Membership membership) {
+  factory LocalRiderMembership.fromMembership(MembershipData membership) {
     return LocalRiderMembership(
       membershipId: membership.id,
       kategoriPembayaran: membership.kategoriPembayaran,

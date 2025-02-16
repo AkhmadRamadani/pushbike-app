@@ -232,6 +232,7 @@ class LevelView extends StatelessWidget {
                   ) ??
                   const SizedBox(),
             ),
+            SizedBox(height: 12.h),
             Obx(
               () =>
                   LevelController.to.levelState.value.whenOrNull(

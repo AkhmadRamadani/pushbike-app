@@ -233,7 +233,7 @@ class Wali {
     DateTime? createdAt,
     DateTime? updatedAt,
     List<Rider>? riders,
-    Membership? membership,
+    MembershipData? membership,
   }) =>
       Wali(
         id: id ?? this.id,
@@ -295,7 +295,7 @@ class Wali {
       };
 }
 
-class Membership {
+class MembershipData {
   int? id;
   String? kategoriPembayaran;
   String? judulMember;
@@ -303,8 +303,9 @@ class Membership {
   String? syaratKetentuan;
   DateTime? createdAt;
   DateTime? updatedAt;
+  bool? isPurchased;
 
-  Membership({
+  MembershipData({
     this.id,
     this.kategoriPembayaran,
     this.judulMember,
@@ -312,9 +313,10 @@ class Membership {
     this.syaratKetentuan,
     this.createdAt,
     this.updatedAt,
+    this.isPurchased,
   });
 
-  Membership copyWith({
+  MembershipData copyWith({
     int? id,
     String? kategoriPembayaran,
     String? judulMember,
@@ -322,8 +324,9 @@ class Membership {
     String? syaratKetentuan,
     DateTime? createdAt,
     DateTime? updatedAt,
+    bool? isPurchased,
   }) =>
-      Membership(
+      MembershipData(
         id: id ?? this.id,
         kategoriPembayaran: kategoriPembayaran ?? this.kategoriPembayaran,
         judulMember: judulMember ?? this.judulMember,
@@ -331,9 +334,10 @@ class Membership {
         syaratKetentuan: syaratKetentuan ?? this.syaratKetentuan,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
+        isPurchased: isPurchased ?? this.isPurchased,
       );
 
-  factory Membership.fromJson(Map<String, dynamic> json) => Membership(
+  factory MembershipData.fromJson(Map<String, dynamic> json) => MembershipData(
         id: json["id"],
         kategoriPembayaran: json["kategori_pembayaran"],
         judulMember: json["judul_member"],
@@ -341,10 +345,11 @@ class Membership {
         syaratKetentuan: json["syarat_ketentuan"],
         createdAt: json["created_at"] == null
             ? null
-            : DateTime.parse(json["created_at"]),
+            : DateTime.tryParse(json["created_at"]),
         updatedAt: json["updated_at"] == null
             ? null
-            : DateTime.parse(json["updated_at"]),
+            : DateTime.tryParse(json["updated_at"]),
+        isPurchased: json["is_purchased"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -355,7 +360,10 @@ class Membership {
         "syarat_ketentuan": syaratKetentuan,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "is_purchased": isPurchased,
       };
+
+  num get hargaNum => num.tryParse(harga ?? '0') ?? 0;
 }
 
 class Rider {
@@ -379,7 +387,7 @@ class Rider {
   int? gender;
   int? totalPoints;
   Level? level;
-  Membership? membership;
+  MembershipData? membership;
 
   Rider({
     this.id,
@@ -426,7 +434,7 @@ class Rider {
     int? gender,
     int? totalPoints,
     Level? level,
-    Membership? membership,
+    MembershipData? membership,
   }) =>
       Rider(
         id: id ?? this.id,
@@ -481,7 +489,7 @@ class Rider {
         level: json["level"] == null ? null : Level.fromJson(json["level"]),
         membership: json["membership"] == null
             ? null
-            : Membership.fromJson(json["membership"]),
+            : MembershipData.fromJson(json["membership"]),
       );
 
   Map<String, dynamic> toJson() => {

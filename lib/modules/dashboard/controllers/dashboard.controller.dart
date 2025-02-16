@@ -12,18 +12,24 @@ import 'package:pushbike_app/modules/dashboard/models/menu_model.dart';
 import 'package:pushbike_app/modules/information/controllers/dashboard_information_section.controller.dart';
 import 'package:pushbike_app/modules/level/models/responses/get_my_level.response.model.dart';
 import 'package:pushbike_app/modules/level/repositories/level.repository.dart';
+import 'package:pushbike_app/modules/pembayaran/models/responses/get_latest_bill.response.model.dart';
+import 'package:pushbike_app/modules/pembayaran/repositories/pembayaran.repository.dart';
 
 class DashboardController extends GetxController {
   static DashboardController get to => Get.find<DashboardController>();
 
   final AuthRepository _authRepository = AuthRepository();
   final LevelRepository _levelRepository = LevelRepository();
+  PembayaranRepository pembayaranRepository = PembayaranRepository();
+
   final DashboardInformationSectionController _informationController =
       Get.put(DashboardInformationSectionController());
   Rx<UIState<LocalUserData>> userDataState =
       const UIState<LocalUserData>.idle().obs;
   Rx<UIState<GetMyLevelResponseModel>> levelState =
       const UIState<GetMyLevelResponseModel>.idle().obs;
+  Rx<UIState<LatestBillData>> latestBillState =
+      const UIState<LatestBillData>.idle().obs;
 
   final List<MenuModel> listMenu = [
     MenuModel(
@@ -47,6 +53,9 @@ class DashboardController extends GetxController {
     MenuModel(
       assetPath: AssetConst.icModul,
       label: "Modul",
+      onTap: () {
+        Get.toNamed(AppRoutes.modul);
+      },
     ),
   ];
 
@@ -55,12 +64,14 @@ class DashboardController extends GetxController {
     super.onInit();
     getLocalData();
     getMyLevel();
+    getLatestBill();
   }
 
   Future<void> onRefresh() async {
     Future.wait([
       getUserData(),
       getMyLevel(),
+      getLatestBill(),
       _informationController.getPengumumanData(),
     ]);
   }
@@ -120,6 +131,26 @@ class DashboardController extends GetxController {
       levelState.value = UIState.error(message: e.toString());
       debugPrint(
           'Error during fetching level data: $e\nStackTrace: $stackTrace');
+    }
+  }
+
+  Future<void> getLatestBill() async {
+    latestBillState.value = const UIState.loading();
+    try {
+      final response = await pembayaranRepository.getLatestBill(
+        date: DateTime.now(),
+      );
+      if (response.statusCode == 200 &&
+          response.data != null &&
+          response.data!.data != null) {
+        latestBillState.value = UIState.success(data: response.data!.data!);
+      } else {
+        latestBillState.value = UIState.error(
+          message: response.message ?? 'Failed to fetch latest bill.',
+        );
+      }
+    } catch (e) {
+      latestBillState.value = UIState.error(message: e.toString());
     }
   }
 }

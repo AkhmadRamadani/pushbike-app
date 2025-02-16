@@ -31,8 +31,8 @@ class MembershipCardComponent extends StatelessWidget {
   ColorModel _getColorModel() {
     return membership.isComingSoon
         ? ColorModel(
-            colorText: ColorConst.textColour30,
-            colorIcon: ColorConst.textColour30,
+            colorText: ColorConst.textColour60,
+            colorIcon: ColorConst.textColour60,
             colorButton: ColorConst.textColour30,
           )
         : ColorModel(

@@ -64,6 +64,8 @@ dependencies:
   isar_flutter_libs:
     git: 
       url: https://github.com/MrLittleWhite/isar_flutter_libs.git
+  infinite_scroll_pagination: ^4.1.0
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

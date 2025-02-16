@@ -105,7 +105,7 @@ class MessagingService {
           var data = message.data;
           if (data.containsKey('type') &&
               data['type'] == 'reservation_approve') {
-            DateTime date = DateTime.parse("${data['date']} ${data['time']}");
+            DateTime date = DateTime.tryParse("${data['date']} ${data['time']}") ?? DateTime.now();
             if (date.isBefore(DateTime.now())) {
               return;
             }

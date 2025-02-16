@@ -11,6 +11,7 @@ import 'package:pushbike_app/core/routes/app_routes.dart';
 import 'package:pushbike_app/core/widget/custom_shimmer_widget.dart';
 import 'package:pushbike_app/core/widget/custom_step_indicator_widget.dart';
 import 'package:pushbike_app/core/widget/separator_widget.dart';
+import 'package:pushbike_app/modules/authentication/models/responses/user_data.response.model.dart';
 import 'package:pushbike_app/modules/dashboard/controllers/dashboard.controller.dart';
 import 'package:pushbike_app/modules/dashboard/views/components/custom_dashboard_clipper.dart';
 import 'package:pushbike_app/modules/dashboard/views/components/custom_dashboard_ellipse_painter.dart';
@@ -266,6 +267,7 @@ class DashboardView extends StatelessWidget {
                 const SizedBox(),
           ),
         ),
+        SizedBox(height: 12.h),
         Obx(
           () =>
               DashboardController.to.userDataState.value.whenOrNull(
@@ -471,12 +473,13 @@ class DashboardView extends StatelessWidget {
   Widget _buildFloatingPaymentInfo() {
     return Obx(
       () =>
-          DashboardController.to.userDataState.value.whenOrNull(
+          DashboardController.to.latestBillState.value.whenOrNull(
             success: (data) => Visibility(
-              visible: data.membership != null,
+              visible: data.pembayaran == null,
               replacement: const SizedBox(),
               child: FloatingPaymentComponent(
-                data: data.membership ?? LocalRiderMembership(),
+                data: LocalRiderMembership.fromMembership(
+                    data.membership ?? MembershipData()),
               ),
             ),
           ) ??

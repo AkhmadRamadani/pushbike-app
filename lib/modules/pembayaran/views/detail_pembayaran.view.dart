@@ -3,9 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
 import 'package:pushbike_app/core/constants/color_const.dart';
+import 'package:pushbike_app/core/extensions/date_extensions.dart';
+import 'package:pushbike_app/core/extensions/num_extensions.dart';
 import 'package:pushbike_app/core/routes/app_routes.dart';
+import 'package:pushbike_app/core/widget/custom_shimmer_widget.dart';
 import 'package:pushbike_app/core/widget/general_app_bar_widget.dart';
+import 'package:pushbike_app/core/widget/general_empty_error_widget.dart';
 import 'package:pushbike_app/core/widget/separator_widget.dart';
+import 'package:pushbike_app/modules/pembayaran/controllers/detail_pembayaran.controller.dart';
 import 'package:pushbike_app/modules/pembayaran/models/payment_data_model.dart';
 import 'package:pushbike_app/modules/pembayaran/views/components/payment_card.dart';
 
@@ -14,28 +19,7 @@ class DetailPembayaranView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<PaymentDataModel> paymentDataList = [
-      PaymentDataModel(
-        month: "Bulan November",
-        amount: "Rp. 500.000",
-        lateText: "Telat 10 Hari",
-      ),
-      PaymentDataModel(
-        month: "Bulan September",
-        amount: "Rp. 500.000",
-        dateTime: "01 Okt 2024, 15:10",
-      ),
-      PaymentDataModel(
-        month: "Bulan Oktober",
-        amount: "Rp. 500.000",
-        dateTime: "01 Okt 2024, 15:10",
-      ),
-      PaymentDataModel(
-        month: "Bulan November",
-        amount: "Rp. 500.000",
-        dateTime: "01 Okt 2024, 15:10",
-      ),
-    ];
+    final controller = Get.find<DetailPembayaranController>();
 
     return Scaffold(
       appBar: const GeneralAppBarWidget(
@@ -50,22 +34,66 @@ class DetailPembayaranView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 12.h),
-                _buildHeader(),
+                _buildHeader(controller),
                 SizedBox(height: 16.h),
-                _buildMembershipDescription(),
+                _buildMembershipDescription(controller),
                 SizedBox(height: 16.h),
                 Text(
                   "Pembayaran Bulanan",
                   style: AppTextStyles.title16Semibold,
                 ),
                 SizedBox(height: 16.h),
-                const PaymentCard(
-                  month: "Bulan November",
-                  amount: "Rp. 500.000",
-                  lateText: "Telat 10 Hari",
+                Obx(
+                  () =>
+                      controller.latestBillState.value.whenOrNull(
+                        success: (data) {
+                          String? lateText = controller.setIsThisMonthLate(
+                            pembayaran: data.pembayaran,
+                            membership: data.membership,
+                          );
+                          return Visibility(
+                            visible: data.pembayaran != null,
+                            replacement: PaymentCard(
+                              month:
+                                  "Bulan ${controller.selectedDate.toReadableMonth()}",
+                              amount: data.membership?.hargaNum.toRupiah() ??
+                                  "Rp. 0",
+                              lateText: lateText,
+                            ),
+                            child: PaymentCard(
+                              month:
+                                  "Bulan ${controller.selectedDate.toReadableMonth()}",
+                              amount:
+                                  "${data.pembayaran?.nominalNum.toRupiah()}",
+                              dateTime: data.pembayaran?.createdAt
+                                      ?.toDayMonthYearHourMinuteString() ??
+                                  "",
+                            ),
+                          );
+                        },
+                        loading: () => CustomShimmerWidget.buildShimmerWidget(
+                          width: double.infinity,
+                          height: 75.h,
+                          radius: 16.r,
+                        ),
+                      ) ??
+                      const SizedBox(),
                 ),
                 SizedBox(height: 16.h),
-                _buildPointsReminder(),
+                Obx(
+                  () =>
+                      controller.latestBillState.value.whenOrNull(
+                        success: (data) {
+                          return _buildPointsReminder(data.point?.poin ?? 0);
+                        },
+                        loading: () => CustomShimmerWidget.buildShimmerWidget(
+                          width: double.infinity,
+                          height: 30.h,
+                          radius: 50.r,
+                        ),
+                      ) ??
+                      const SizedBox(),
+                ),
               ],
             ),
           ),
@@ -99,19 +127,62 @@ class DetailPembayaranView extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 16.h),
-                ListView.builder(
-                  shrinkWrap: true, // Ensures it takes only the necessary space
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: paymentDataList.length,
-                  itemBuilder: (context, index) {
-                    final payment = paymentDataList[index];
-                    return PaymentCard(
-                      month: payment.month,
-                      amount: payment.amount,
-                      lateText: payment.lateText,
-                      dateTime: payment.dateTime,
-                    );
-                  },
+                Obx(
+                  () =>
+                      controller.paymentHistoryState.value.whenOrNull(
+                        success: (data) {
+                          return ListView.builder(
+                            shrinkWrap:
+                                true, // Ensures it takes only the necessary space
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final payment = data[index];
+                              return PaymentCard(
+                                month: payment.month,
+                                amount: payment.amount,
+                                lateText: payment.lateText,
+                                dateTime: payment.dateTime,
+                              );
+                            },
+                          );
+                        },
+                        loading: () => ListView.separated(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                            ),
+                            child: CustomShimmerWidget.buildShimmerWidget(
+                              width: double.infinity,
+                              height: 75.h,
+                              radius: 16,
+                            ),
+                          ),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox.shrink(),
+                          itemCount: 5,
+                        ),
+                        error: (message) => GeneralEmptyErrorWidget(
+                          descText: message,
+                          additionalWidgetBellowTextDesc: InkWell(
+                              onTap: () {
+                                controller.getPaymentHistory();
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(top: 8),
+                                child: Text(
+                                  "Refresh",
+                                  style: AppTextStyles.body14Semibold.copyWith(
+                                    color: ColorConst.blue100,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ) ??
+                      const SizedBox(),
                 ),
                 SizedBox(height: 16.h),
                 _buildButtonPerpanjang(),
@@ -126,7 +197,12 @@ class DetailPembayaranView extends StatelessWidget {
   Widget _buildButtonPerpanjang() {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(AppRoutes.pembayaranPay);
+        Get.toNamed(
+          AppRoutes.pembayaranPay,
+          arguments: {
+            'tipe': 'Iuran',
+          },
+        );
       },
       child: Container(
         width: double.infinity,
@@ -148,24 +224,23 @@ class DetailPembayaranView extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(DetailPembayaranController controller) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Hello, Ammar!",
+          "Hello, ${controller.localUserData?.selectedRider?.panggilan ?? "Rider"}!",
           style: AppTextStyles.h320Semibold,
         ),
         const Spacer(),
         Text(
-          'Boys, 2020',
-          style: AppTextStyles.title16Regular,
-        ),
+            '${controller.localUserData?.selectedRider?.gender == 1 ? "Girls" : "Boys"}, ${controller.localUserData?.selectedRider?.tanggalLahir?.year}',
+            style: AppTextStyles.title16Regular),
       ],
     );
   }
 
-  Widget _buildMembershipDescription() {
+  Widget _buildMembershipDescription(DetailPembayaranController controller) {
     return Text.rich(
       TextSpan(
         children: [
@@ -174,14 +249,16 @@ class DetailPembayaranView extends StatelessWidget {
             style: AppTextStyles.body14Regular,
           ),
           TextSpan(
-            text: "Reguler Membership ",
+            text:
+                "${controller.localUserData?.membership?.judulMember ?? "Member"} ",
             style: AppTextStyles.body14Semibold.copyWith(
               fontWeight: FontWeight.w600,
               color: ColorConst.blueText,
             ),
           ),
           TextSpan(
-            text: "di SCR Kids Community.",
+            text:
+                "di ${controller.localUserData?.komunitas?.namaKomunitas ?? "Komunitas"}.",
             style: AppTextStyles.body14Regular,
           ),
         ],
@@ -189,7 +266,7 @@ class DetailPembayaranView extends StatelessWidget {
     );
   }
 
-  Widget _buildPointsReminder() {
+  Widget _buildPointsReminder(int poin) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(8),
@@ -206,7 +283,7 @@ class DetailPembayaranView extends StatelessWidget {
                 style: AppTextStyles.caption12Regular,
               ),
               TextSpan(
-                text: "+10 Poin ",
+                text: "+$poin Poin ",
                 style: AppTextStyles.caption12Semibold.copyWith(
                   fontWeight: FontWeight.w600,
                   color: ColorConst.blueText,
