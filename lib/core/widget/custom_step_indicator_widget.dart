@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
-import 'package:pushbike_app/modules/level/models/responses/get_my_level.response.model.dart';
+import 'package:pushbike_app/modules/authentication/models/responses/user_data.response.model.dart';
 
 class CustomStepIndicatorLevelWidget extends StatefulWidget {
   final List<Level> list;

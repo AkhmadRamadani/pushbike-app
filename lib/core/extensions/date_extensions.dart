@@ -19,6 +19,9 @@ extension DateExtension on DateTime {
   String toHumanReadableDateString() {
     return DateFormat('EEEE, dd MMMM yyyy', locale).format(this);
   }
+  String toHumanReadableDateStringMonthShort() {
+    return DateFormat('EEEE, dd MMM yyyy', locale).format(this);
+  }
 
   String toHHMMString() {
     return DateFormat('HH:mm', locale).format(this);

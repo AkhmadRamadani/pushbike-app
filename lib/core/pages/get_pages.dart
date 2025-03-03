@@ -21,7 +21,13 @@ import 'package:pushbike_app/modules/pembayaran/views/detail_pembayaran.view.dar
 import 'package:pushbike_app/modules/pembayaran/views/pembayaran.view.dart';
 import 'package:pushbike_app/modules/pembayaran/views/pembayaran_pay.view.dart';
 import 'package:pushbike_app/modules/pembayaran/views/riwayat_pembayaran.view.dart';
+import 'package:pushbike_app/modules/point/controllers/point.controller.dart';
 import 'package:pushbike_app/modules/point/views/point.view.dart';
+import 'package:pushbike_app/modules/riders/subfeatures/profile_rider/views/edit_profile_rider.view.dart';
+import 'package:pushbike_app/modules/riders/subfeatures/profile_rider/views/profile_rider.view.dart';
+import 'package:pushbike_app/modules/riders/subfeatures/race_recap/views/race_recap.view.dart';
+import 'package:pushbike_app/modules/riders/subfeatures/riders_checkpoint/controllers/riders_checkpoint.controller.dart';
+import 'package:pushbike_app/modules/riders/subfeatures/riders_checkpoint/views/riders_checkpoint.view.dart';
 import 'package:pushbike_app/modules/splash/controllers/splash.controller.dart';
 import 'package:pushbike_app/modules/splash/views/splash.view.dart';
 
@@ -75,6 +81,11 @@ class GetPages {
       GetPage(
         name: AppRoutes.point,
         page: () => const PointView(),
+        binding: BindingsBuilder(
+          () {
+            Get.lazyPut(() => PointController());
+          },
+        ),
       ),
       GetPage(
         name: AppRoutes.information,
@@ -128,6 +139,27 @@ class GetPages {
           },
         ),
       ),
+      GetPage(
+        name: AppRoutes.ridersCheckpoint,
+        page: () => const RidersCheckpointView(),
+        binding: BindingsBuilder(
+          () {
+            Get.lazyPut(() => RidersCheckpointController());
+          },
+        ),
+      ),
+      GetPage(
+        name: AppRoutes.raceRecap,
+        page: () => const RaceRecapView(),
+      ),
+      GetPage(
+        name: AppRoutes.profileRider,
+        page: () => const ProfileRiderView(),
+      ),
+      GetPage(
+        name: AppRoutes.editProfileRider,
+        page: () => const EditProfileRiderView(),
+      )
     ];
   }
 }

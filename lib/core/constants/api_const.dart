@@ -1,6 +1,8 @@
 class ApiConst {
   ApiConst._();
-  static const String baseUrl = "http://192.168.0.179:8000/api/";
+  // static const String baseUrl = "http://192.168.0.179:8000/api/";
+  // 10.10.5.63
+  static const String baseUrl = "http://10.10.5.63:8000/api/";
 
   static const String login = "login";
   static const String register = "register";
@@ -32,4 +34,19 @@ class ApiConst {
 
   static const String modulLatihan = "modul-latihan-mobile";
   static const String bayarPembayaran = "bayar-pembayaran";
+
+  static const String riderHistoryPoint = "rider-history-point";
+  static const String indexEventMobile = "index-event-mobile";
+  static const String ridersCheckpointMobile = "riders-checkpoint-mobile";
+  static const String assignCheckpoint = "assign-checkpoint";
+
+  static const String riderJoinedEvent = "rider-joined-event";
+  static const String indexHasilRace = "index-race-mobile";
+  static const String uploadHasilRace = "upload-race";
+  static const String raceRecapRider = "rider-race-record";
+
+  static String updateRiderMobile(int id) => "update-rider-mobile/$id";
+  static String updateWaliMobile(int id) => "update-wali-mobile/$id";
+  static String updateSepedaMobile(int id) => "update-sepeda-mobile/$id";
+  static String dataInitial(int id) => "data-initial/$id";
 }

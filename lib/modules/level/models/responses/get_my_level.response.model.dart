@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:pushbike_app/modules/authentication/models/responses/user_data.response.model.dart';
+
 GetMyLevelResponseModel getMyLevelResponseModelFromJson(String str) =>
     GetMyLevelResponseModel.fromJson(json.decode(str));
 
@@ -68,68 +70,5 @@ class GetMyLevelResponseModel {
             : List<dynamic>.from(allLevels!.map((x) => x.toJson())),
         "current_page": currentPage,
         "next_level": nextLevel?.toJson(),
-      };
-}
-
-class Level {
-  int? id;
-  String? nama;
-  int? minimalPoin;
-  int? maksimalPoin;
-  String? icon;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  Level({
-    this.id,
-    this.nama,
-    this.minimalPoin,
-    this.maksimalPoin,
-    this.icon,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  Level copyWith({
-    int? id,
-    String? nama,
-    int? minimalPoin,
-    int? maksimalPoin,
-    String? icon,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-  }) =>
-      Level(
-        id: id ?? this.id,
-        nama: nama ?? this.nama,
-        minimalPoin: minimalPoin ?? this.minimalPoin,
-        maksimalPoin: maksimalPoin ?? this.maksimalPoin,
-        icon: icon ?? this.icon,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
-
-  factory Level.fromJson(Map<String, dynamic> json) => Level(
-        id: json["id"],
-        nama: json["nama"],
-        minimalPoin: json["minimal_poin"],
-        maksimalPoin: json["maksimal_poin"],
-        icon: json["icon"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.tryParse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.tryParse(json["updated_at"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "nama": nama,
-        "minimal_poin": minimalPoin,
-        "maksimal_poin": maksimalPoin,
-        "icon": icon,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
       };
 }

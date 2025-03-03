@@ -4,8 +4,13 @@ import 'package:pushbike_app/core/constants/color_const.dart';
 
 class OrderedListWidget extends StatelessWidget {
   final List<String> items;
+  final TextStyle? textStyle;
 
-  const OrderedListWidget({super.key, required this.items});
+  const OrderedListWidget({
+    super.key,
+    required this.items,
+    this.textStyle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +23,18 @@ class OrderedListWidget extends StatelessWidget {
           children: [
             Text(
               "${index + 1}. ",
-              style: AppTextStyles.body14Regular.copyWith(
-                color: ColorConst.textColour90,
-              ),
+              style: textStyle ??
+                  AppTextStyles.body14Regular.copyWith(
+                    color: ColorConst.textColour90,
+                  ),
             ),
             Expanded(
               child: Text(
                 items[index],
-                style: AppTextStyles.body14Regular.copyWith(
-                  color: ColorConst.textColour90,
-                ),
+                style: textStyle ??
+                    AppTextStyles.body14Regular.copyWith(
+                      color: ColorConst.textColour90,
+                    ),
               ),
             ),
           ],

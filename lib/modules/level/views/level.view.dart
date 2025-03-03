@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
@@ -15,6 +14,7 @@ import 'package:pushbike_app/core/widget/general_empty_error_widget.dart';
 import 'package:pushbike_app/modules/dashboard/views/components/custom_dashboard_ellipse_painter.dart';
 import 'package:iconify_flutter/icons/ion.dart';
 import 'package:pushbike_app/modules/level/controllers/level.controller.dart';
+import 'package:pushbike_app/modules/point/views/components/point_card.component.dart';
 
 class LevelView extends StatelessWidget {
   const LevelView({super.key});
@@ -99,11 +99,7 @@ class LevelView extends StatelessWidget {
                   children: [
                     _buildPointsSection(),
                     SizedBox(height: 32.h),
-                    const GeneralEmptyErrorWidget(
-                      customUrlImage: AssetConst.drawMaintenance,
-                      titleText: 'Fitur ini sedang dalam perbaikan',
-                      descText: 'Akan segera hadir, tunggu kabar selanjutnya!',
-                    ),
+                    _buildRiwayatPoin(),
                   ],
                 ),
               ),
@@ -143,55 +139,66 @@ class LevelView extends StatelessWidget {
             ],
           ),
           SizedBox(height: 24.h),
-          ListView.separated(
-            itemCount: 4,
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) => SizedBox(height: 6.h),
-            itemBuilder: (context, index) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Selasa, 5 Nov 2024",
-                  style: AppTextStyles.body14Semibold,
-                ),
-                SizedBox(
-                  height: 8.h,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8.sp),
-                      decoration: BoxDecoration(
-                          color: ColorConst.green30,
-                          borderRadius: BorderRadius.circular(50.r)),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          AssetConst.icWhistle,
-                          width: 20.sp,
+          Obx(
+            () =>
+                LevelController.to.listRiderHistoryPoints.value.whenOrNull(
+                  success: (data) => ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) {
+                      final item = data.data![index];
+                      return PointCardComponent(item: item);
+                    },
+                    separatorBuilder: (context, index) => SizedBox(height: 6.h),
+                    itemCount: data.data?.length ?? 0,
+                  ),
+                  error: (error) => GeneralEmptyErrorWidget(
+                    customUrlImage: AssetConst.drawEmptyWidget,
+                    titleText: 'Riwayat Poin Kosong',
+                    descText: error,
+                    additionalWidgetBellowTextDesc: InkWell(
+                      onTap: () {
+                        LevelController.to
+                            .getRiderHistoryPoints(isRefresh: true);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          "Refresh",
+                          style: AppTextStyles.body14Semibold.copyWith(
+                            color: ColorConst.blue100,
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 8.w,
-                    ),
-                    Expanded(
-                      child: Text(
-                        "Jadwal Latihan",
-                        style: AppTextStyles.body14Regular,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                  ),
+                  loading: () => CustomShimmerWidget.buildShimmerWidget(
+                    width: 1.sw,
+                    height: 200.h,
+                  ),
+                  empty: (message) => GeneralEmptyErrorWidget(
+                    customUrlImage: AssetConst.drawEmptyWidget,
+                    titleText: 'Riwayat Poin Kosong',
+                    descText: message,
+                    additionalWidgetBellowTextDesc: InkWell(
+                      onTap: () {
+                        LevelController.to
+                            .getRiderHistoryPoints(isRefresh: true);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          "Refresh",
+                          style: AppTextStyles.body14Semibold.copyWith(
+                            color: ColorConst.blue100,
+                          ),
+                        ),
                       ),
                     ),
-                    Text(
-                      "+10 Poin",
-                      style: AppTextStyles.body14Semibold,
-                    )
-                  ],
-                )
-              ],
-            ),
+                  ),
+                ) ??
+                const SizedBox(),
           ),
         ],
       ),
@@ -209,7 +216,7 @@ class LevelView extends StatelessWidget {
               () =>
                   LevelController.to.levelState.value.whenOrNull(
                     success: (data) => Image.network(
-                      data.level?.icon ?? '',
+                      data.level?.iconUrl ?? '',
                       width: 160.w,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) {

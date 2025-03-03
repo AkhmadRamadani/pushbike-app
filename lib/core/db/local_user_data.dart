@@ -118,7 +118,7 @@ class LocalKomunitas {
       komunitasId: komunitas.id,
       namaKomunitas: komunitas.nama,
       warnaBg: komunitas.warnaBg,
-      logo: komunitas.logo,
+      logo: komunitas.logoUrl,
     );
   }
 
@@ -199,7 +199,7 @@ class LocalRiderLevel {
         nama: level.nama,
         minimalPoin: level.minimalPoin,
         maksimalPoin: level.maksimalPoin,
-        icon: level.icon,
+        icon: level.iconUrl,
       );
 
   Map<String, dynamic> toJson() => {

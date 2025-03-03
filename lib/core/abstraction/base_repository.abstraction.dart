@@ -30,6 +30,7 @@ abstract class BaseRepository {
 
       final response = fromJson(res.data);
 
+
       return ResponseModelAbstraction<T>(
         statusCode: res.statusCode,
         message: res.statusMessage,

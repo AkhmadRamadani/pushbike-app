@@ -137,4 +137,9 @@ abstract class ColorConst {
   static const Color pinkRiders = Color(0xffFA6C71);
   // #276297
   static const Color blueText = Color(0xff276297);
+
+  static const Color backgroundTextField = Color(0xfff6f6f6);
+
+  // rgba(255, 255, 255, 0.5)
+  static const Color backgroundProfileWhite = Color.fromRGBO(255, 255, 255, 0.5);
 }

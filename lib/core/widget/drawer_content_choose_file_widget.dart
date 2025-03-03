@@ -49,7 +49,7 @@ class DrawerContentChooseFileWidget extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8.r),
           border: Border.all(
-            color: ColorConst.blue50,
+            color: ColorConst.blue100,
           ),
         ),
         child: InkWell(
@@ -65,7 +65,7 @@ class DrawerContentChooseFileWidget extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: 14.sp,
-                    color: ColorConst.blue50,
+                    color: ColorConst.blue100,
                   ),
                 ),
               ],
@@ -86,7 +86,7 @@ class DrawerContentChooseFileWidget extends StatelessWidget {
                   title: 'Camera',
                   icon: const Icon(
                     Icons.camera_alt,
-                    color: ColorConst.blue50,
+                    color: ColorConst.blue100,
                   ),
                   onTap: () async {
                     DialogService.showLoading();
@@ -112,7 +112,7 @@ class DrawerContentChooseFileWidget extends StatelessWidget {
                   title: 'File',
                   icon: const Icon(
                     Icons.file_present_rounded,
-                    color: ColorConst.blue50,
+                    color: ColorConst.blue100,
                   ),
                   onTap: () async {
                     DialogService.showLoading();
@@ -138,7 +138,7 @@ class DrawerContentChooseFileWidget extends StatelessWidget {
                   title: 'Galeri',
                   icon: const Icon(
                     Icons.image,
-                    color: ColorConst.blue50,
+                    color: ColorConst.blue100,
                   ),
                   onTap: () async {
                     DialogService.showLoading();
@@ -157,7 +157,6 @@ class DrawerContentChooseFileWidget extends StatelessWidget {
               ),
             );
             break;
-          
         }
       }
 

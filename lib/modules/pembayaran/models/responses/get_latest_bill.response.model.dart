@@ -6,7 +6,6 @@ import 'dart:convert';
 
 import 'package:pushbike_app/modules/authentication/models/responses/user_data.response.model.dart';
 import 'package:pushbike_app/modules/jadwal/models/responses/get_event_calendar.response.model.dart';
-import 'package:pushbike_app/modules/pembayaran/models/responses/get_list_membership.response.model.dart';
 import 'package:pushbike_app/modules/pembayaran/models/responses/get_payment_history.response.model.dart';
 
 GetLatestBillResponseModel getLatestBillResponseModelFromJson(String str) =>

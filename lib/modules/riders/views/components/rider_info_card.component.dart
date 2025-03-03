@@ -9,6 +9,7 @@ class RiderInfoCardComponent extends StatelessWidget {
   final String description;
   final TextAlign textAlign;
   final bool isImageFirst;
+  final Function()? onTap;
 
   const RiderInfoCardComponent({
     super.key,
@@ -18,22 +19,27 @@ class RiderInfoCardComponent extends StatelessWidget {
     required this.description,
     required this.textAlign,
     this.isImageFirst = true,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
-      height: 172.h,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Row(
-        crossAxisAlignment:
-            isImageFirst ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-        children:
-            isImageFirst ? _buildImageFirstLayout() : _buildTextFirstLayout(),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16.w),
+        height: 172.h,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Row(
+          crossAxisAlignment:
+              isImageFirst ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+          children:
+              isImageFirst ? _buildImageFirstLayout() : _buildTextFirstLayout(),
+        ),
       ),
     );
   }

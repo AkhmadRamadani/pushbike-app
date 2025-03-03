@@ -19,4 +19,9 @@ class AppRoutes {
   static const String jadwal = '/jadwal';
 
   static const String modul = '/modul';
+  static const String ridersCheckpoint = '/riders-checkpoint';
+  static const String raceRecap = '/race-recap';
+
+  static const String profileRider = '/profile-rider';
+  static const String editProfileRider = '/profile-rider/edit';
 }

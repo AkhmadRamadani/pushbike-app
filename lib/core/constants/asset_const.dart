@@ -80,6 +80,8 @@ class AssetConst {
       'assets/svg/ic_setting_navbar_inactive.svg';
   static const String icCheckPembayaran =
       'assets/images/ic_check_pembayaran.png';
+  static const String icCheckpointPending =
+      'assets/images/ic_checkpoint_pending.png';
 
   // pattern
   static const String cardPembayaranPattern =
@@ -87,4 +89,8 @@ class AssetConst {
 
   static const String backgroundSupportUsCard =
       'assets/images/background_support_us_card.png';
+
+  static const String ionImageOutline = 'assets/images/ion_image-outline.png';
+  static const String photoProfileExample =
+      'assets/images/photo_profile_example.jpeg';
 }

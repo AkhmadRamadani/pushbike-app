@@ -11,7 +11,6 @@ import 'package:pushbike_app/core/widget/general_app_bar_widget.dart';
 import 'package:pushbike_app/core/widget/general_empty_error_widget.dart';
 import 'package:pushbike_app/core/widget/separator_widget.dart';
 import 'package:pushbike_app/modules/pembayaran/controllers/detail_pembayaran.controller.dart';
-import 'package:pushbike_app/modules/pembayaran/models/payment_data_model.dart';
 import 'package:pushbike_app/modules/pembayaran/views/components/payment_card.dart';
 
 class DetailPembayaranView extends StatelessWidget {

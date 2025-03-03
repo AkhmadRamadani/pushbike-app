@@ -14,6 +14,10 @@ class CustomInputTextWidget extends StatefulWidget {
   final List<String? Function(String?)>? validators;
   final VoidCallback? onEditingComplete;
   final void Function(String)? onFieldSubmitted;
+  final Color? fillColor;
+  final TextInputType? textInputType;
+  final bool enabled;
+  final VoidCallback? onTap;
 
   const CustomInputTextWidget({
     super.key,
@@ -26,6 +30,10 @@ class CustomInputTextWidget extends StatefulWidget {
     this.validators,
     this.onEditingComplete,
     this.onFieldSubmitted,
+    this.fillColor,
+    this.textInputType,
+    this.enabled = false,
+    this.onTap,
   });
 
   @override
@@ -80,6 +88,9 @@ class _CustomInputTextWidgetState extends State<CustomInputTextWidget> {
           style: widget.textStyle ?? AppTextStyles.body14Regular,
           onEditingComplete: widget.onEditingComplete,
           onFieldSubmitted: widget.onFieldSubmitted,
+          keyboardType: widget.textInputType,
+          readOnly: widget.enabled,
+          onTap: widget.onTap,
           decoration: widget.decoration?.copyWith(
                 hintText: widget.hintText,
                 suffixIcon: widget.isPasswordField
@@ -99,6 +110,8 @@ class _CustomInputTextWidgetState extends State<CustomInputTextWidget> {
               ) ??
               InputDecoration(
                 hintText: widget.hintText,
+                fillColor: widget.fillColor,
+                filled: widget.fillColor != null,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),

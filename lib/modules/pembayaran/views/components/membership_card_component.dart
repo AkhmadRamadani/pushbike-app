@@ -77,7 +77,7 @@ class MembershipCardComponent extends StatelessWidget {
                 SizedBox(height: 12.h),
                 _buildActionButtons(context, colors),
                 SizedBox(height: 8.h),
-                if (membership.errorText != null)
+                if (membership.errorText.isNotEmpty)
                   Row(
                     children: [
                       Iconify(
@@ -87,7 +87,7 @@ class MembershipCardComponent extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        membership.errorText ?? "",
+                        membership.errorText,
                         style: AppTextStyles.captionLimited10Regular.copyWith(
                           color: colors.colorText,
                         ),

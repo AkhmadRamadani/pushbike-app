@@ -102,7 +102,7 @@ class Komunitas {
   String? pic;
   String? noTelpPic;
   String? alamat;
-  String? logo;
+  String? logoUrl;
   String? warnaBg;
   DateTime? tanggalBerlangganan;
   int? maksimalRider;
@@ -115,7 +115,7 @@ class Komunitas {
     this.pic,
     this.noTelpPic,
     this.alamat,
-    this.logo,
+    this.logoUrl,
     this.warnaBg,
     this.tanggalBerlangganan,
     this.maksimalRider,
@@ -129,7 +129,7 @@ class Komunitas {
     String? pic,
     String? noTelpPic,
     String? alamat,
-    String? logo,
+    String? logoUrl,
     String? warnaBg,
     DateTime? tanggalBerlangganan,
     int? maksimalRider,
@@ -142,7 +142,7 @@ class Komunitas {
         pic: pic ?? this.pic,
         noTelpPic: noTelpPic ?? this.noTelpPic,
         alamat: alamat ?? this.alamat,
-        logo: logo ?? this.logo,
+        logoUrl: logoUrl ?? this.logoUrl,
         warnaBg: warnaBg ?? this.warnaBg,
         tanggalBerlangganan: tanggalBerlangganan ?? this.tanggalBerlangganan,
         maksimalRider: maksimalRider ?? this.maksimalRider,
@@ -156,7 +156,7 @@ class Komunitas {
         pic: json["pic"],
         noTelpPic: json["no_telp_pic"],
         alamat: json["alamat"],
-        logo: json["logo"],
+        logoUrl: json["logo_url"],
         warnaBg: json["warna_bg"],
         tanggalBerlangganan: json["tanggal_berlangganan"] == null
             ? null
@@ -175,7 +175,7 @@ class Komunitas {
         "pic": pic,
         "no_telp_pic": noTelpPic,
         "alamat": alamat,
-        "logo": logo,
+        "logo_url": logoUrl,
         "warna_bg": warnaBg,
         "tanggal_berlangganan":
             "${tanggalBerlangganan!.year.toString().padLeft(4, '0')}-${tanggalBerlangganan!.month.toString().padLeft(2, '0')}-${tanggalBerlangganan!.day.toString().padLeft(2, '0')}",
@@ -192,11 +192,11 @@ class Wali {
   String? telpMama;
   String? namaPapa;
   String? telpPapa;
-  String? fileKk;
-  String? fileAkte;
-  String? fileKia;
+  String? fileKkUrl;
+  String? fileAkteUrl;
+  String? fileKiaUrl;
   String? alamat;
-  String? fotoProfile;
+  String? fotoProfileUrl;
   DateTime? createdAt;
   DateTime? updatedAt;
   List<Rider>? riders;
@@ -208,11 +208,11 @@ class Wali {
     this.telpMama,
     this.namaPapa,
     this.telpPapa,
-    this.fileKk,
-    this.fileAkte,
-    this.fileKia,
+    this.fileKkUrl,
+    this.fileAkteUrl,
+    this.fileKiaUrl,
     this.alamat,
-    this.fotoProfile,
+    this.fotoProfileUrl,
     this.createdAt,
     this.updatedAt,
     this.riders,
@@ -225,11 +225,11 @@ class Wali {
     String? telpMama,
     String? namaPapa,
     String? telpPapa,
-    String? fileKk,
-    String? fileAkte,
-    String? fileKia,
+    String? fileKkUrl,
+    String? fileAkteUrl,
+    String? fileKiaUrl,
     String? alamat,
-    String? fotoProfile,
+    String? fotoProfileUrl,
     DateTime? createdAt,
     DateTime? updatedAt,
     List<Rider>? riders,
@@ -242,11 +242,11 @@ class Wali {
         telpMama: telpMama ?? this.telpMama,
         namaPapa: namaPapa ?? this.namaPapa,
         telpPapa: telpPapa ?? this.telpPapa,
-        fileKk: fileKk ?? this.fileKk,
-        fileAkte: fileAkte ?? this.fileAkte,
-        fileKia: fileKia ?? this.fileKia,
+        fileKkUrl: fileKkUrl ?? this.fileKkUrl,
+        fileAkteUrl: fileAkteUrl ?? this.fileAkteUrl,
+        fileKiaUrl: fileKiaUrl ?? this.fileKiaUrl,
         alamat: alamat ?? this.alamat,
-        fotoProfile: fotoProfile ?? this.fotoProfile,
+        fotoProfileUrl: fotoProfileUrl ?? this.fotoProfileUrl,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
         riders: riders ?? this.riders,
@@ -259,11 +259,11 @@ class Wali {
         telpMama: json["telp_mama"],
         namaPapa: json["nama_papa"],
         telpPapa: json["telp_papa"],
-        fileKk: json["file_kk"],
-        fileAkte: json["file_akte"],
-        fileKia: json["file_kia"],
+        fileKkUrl: json["file_kk_url"],
+        fileAkteUrl: json["file_akte_url"],
+        fileKiaUrl: json["file_kia_url"],
         alamat: json["alamat"],
-        fotoProfile: json["foto_profile"],
+        fotoProfileUrl: json["foto_profile_url"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.tryParse(json["created_at"]),
@@ -282,11 +282,11 @@ class Wali {
         "telp_mama": telpMama,
         "nama_papa": namaPapa,
         "telp_papa": telpPapa,
-        "file_kk": fileKk,
-        "file_akte": fileAkte,
-        "file_kia": fileKia,
+        "file_kk_url": fileKkUrl,
+        "file_akte_url": fileAkteUrl,
+        "file_kia_url": fileKiaUrl,
         "alamat": alamat,
-        "foto_profile": fotoProfile,
+        "foto_profile_url": fotoProfileUrl,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "riders": riders == null
@@ -381,7 +381,7 @@ class Rider {
   String? ukuranSepatu;
   String? nomorPlat;
   String? warnaOfficial;
-  String? fotoRider;
+  String? fotoRiderUrl;
   DateTime? createdAt;
   DateTime? updatedAt;
   int? gender;
@@ -404,7 +404,7 @@ class Rider {
     this.ukuranSepatu,
     this.nomorPlat,
     this.warnaOfficial,
-    this.fotoRider,
+    this.fotoRiderUrl,
     this.createdAt,
     this.updatedAt,
     this.gender,
@@ -428,7 +428,7 @@ class Rider {
     String? ukuranSepatu,
     String? nomorPlat,
     String? warnaOfficial,
-    String? fotoRider,
+    String? fotoRiderUrl,
     DateTime? createdAt,
     DateTime? updatedAt,
     int? gender,
@@ -451,7 +451,7 @@ class Rider {
         ukuranSepatu: ukuranSepatu ?? this.ukuranSepatu,
         nomorPlat: nomorPlat ?? this.nomorPlat,
         warnaOfficial: warnaOfficial ?? this.warnaOfficial,
-        fotoRider: fotoRider ?? this.fotoRider,
+        fotoRiderUrl: fotoRiderUrl ?? this.fotoRiderUrl,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
         gender: gender ?? this.gender,
@@ -477,7 +477,7 @@ class Rider {
         ukuranSepatu: json["ukuran_sepatu"],
         nomorPlat: json["nomor_plat"],
         warnaOfficial: json["warna_official"],
-        fotoRider: json["foto_rider"],
+        fotoRiderUrl: json["foto_rider_url"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -508,7 +508,7 @@ class Rider {
         "ukuran_sepatu": ukuranSepatu,
         "nomor_plat": nomorPlat,
         "warna_official": warnaOfficial,
-        "foto_rider": fotoRider,
+        "foto_rider_url": fotoRiderUrl,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "gender": gender,
@@ -523,7 +523,7 @@ class Level {
   String? nama;
   int? minimalPoin;
   int? maksimalPoin;
-  String? icon;
+  String? iconUrl;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -532,7 +532,7 @@ class Level {
     this.nama,
     this.minimalPoin,
     this.maksimalPoin,
-    this.icon,
+    this.iconUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -542,7 +542,7 @@ class Level {
     String? nama,
     int? minimalPoin,
     int? maksimalPoin,
-    String? icon,
+    String? iconUrl,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) =>
@@ -551,7 +551,7 @@ class Level {
         nama: nama ?? this.nama,
         minimalPoin: minimalPoin ?? this.minimalPoin,
         maksimalPoin: maksimalPoin ?? this.maksimalPoin,
-        icon: icon ?? this.icon,
+        iconUrl: iconUrl ?? this.iconUrl,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
       );
@@ -561,7 +561,7 @@ class Level {
         nama: json["nama"],
         minimalPoin: json["minimal_poin"],
         maksimalPoin: json["maksimal_poin"],
-        icon: json["icon"],
+        iconUrl: json["icon_url"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -575,7 +575,7 @@ class Level {
         "nama": nama,
         "minimal_poin": minimalPoin,
         "maksimal_poin": maksimalPoin,
-        "icon": icon,
+        "icon_url": iconUrl,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
