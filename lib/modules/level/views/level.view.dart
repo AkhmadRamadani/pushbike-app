@@ -61,8 +61,6 @@ class LevelView extends StatelessWidget {
               ),
             ],
           ),
-
-          // Login Form Container
           Column(
             children: [
               Container(
@@ -94,13 +92,17 @@ class LevelView extends StatelessWidget {
                     topRight: Radius.circular(30),
                   ),
                 ),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    _buildPointsSection(),
-                    SizedBox(height: 32.h),
-                    _buildRiwayatPoin(),
-                  ],
+                child: RefreshIndicator(
+                  onRefresh: () => LevelController.to.refreshData(),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      _buildPointsSection(),
+                      SizedBox(height: 32.h),
+                      _buildRiwayatPoin(),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -331,7 +333,7 @@ class LevelView extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.all(4),
                   list: data.allLevels ?? [],
-                  division: 1,
+                  division: 2,
                   onChange: (i) {},
                   page: data.currentPage ?? 0,
                 ),

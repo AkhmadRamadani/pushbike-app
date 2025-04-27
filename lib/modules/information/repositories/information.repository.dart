@@ -17,7 +17,7 @@ class InformationRepository extends BaseRepository {
       apiCall: () => ApiServices.call().get(
           ApiConst.announcement(localData?.selectedRider?.riderId ?? 0),
           queryParameters: {'page': page, 'limit': limit}),
-      fromJson: (data) => GetPengumumanDataResponseModel.fromJson(data),
+      fromJson: (data) => GetPengumumanDataResponseModel.fromJson(data['data']),
       tag: 'InformationRepository - getIndexInformation',
     );
   }

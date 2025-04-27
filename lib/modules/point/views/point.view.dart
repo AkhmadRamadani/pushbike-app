@@ -47,11 +47,19 @@ class PointView extends StatelessWidget {
   }
 
   Widget _buildEmptyState(String message) {
-    return GeneralEmptyErrorWidget(
-      customUrlImage: AssetConst.drawEmptyWidget,
-      titleText: 'Riwayat Poin Kosong',
-      descText: message,
-      additionalWidgetBellowTextDesc: _buildRefreshButton(),
+    return SizedBox(
+      width: double.infinity,
+      height: 1.sh,
+      child: Center(
+        child: GeneralEmptyErrorWidget(
+          customUrlImage: AssetConst.drawEmptyWidget,
+          titleText: 'Riwayat Poin Kosong',
+          descText: message,
+          additionalWidgetBellowTextDesc: _buildRefreshButton(),
+          onRefresh: () =>
+              PointController.to.getRiderHistoryPoints(isRefresh: true),
+        ),
+      ),
     );
   }
 

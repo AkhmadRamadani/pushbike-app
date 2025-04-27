@@ -30,7 +30,6 @@ abstract class BaseRepository {
 
       final response = fromJson(res.data);
 
-
       return ResponseModelAbstraction<T>(
         statusCode: res.statusCode,
         message: res.statusMessage,
@@ -38,7 +37,8 @@ abstract class BaseRepository {
       );
     } on DioException catch (dioError) {
       final statusCode = dioError.response?.statusCode ?? 400;
-      final errorMessage = DioErrorHelper.fromDioError(dioError);
+      final errorMessage = dioError.response?.data['message'] ??
+          DioErrorHelper.fromDioError(dioError);
 
       if (dioError.response?.data == null) {
         throw errorMessage;

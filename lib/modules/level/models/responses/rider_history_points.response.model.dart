@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:pushbike_app/core/extensions/date_extensions.dart';
+
 RiderHistoryPointsResponseModel riderHistoryPointsResponseModelFromJson(
         String str) =>
     RiderHistoryPointsResponseModel.fromJson(json.decode(str));
@@ -68,8 +70,7 @@ class DatumRiderHistoryPoint {
       );
 
   Map<String, dynamic> toJson() => {
-        "date":
-            "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
+        "date": date?.toDateString(),
         "points": points == null
             ? []
             : List<dynamic>.from(points!.map((x) => x.toJson())),

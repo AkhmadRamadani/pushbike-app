@@ -17,7 +17,7 @@ class ModulView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<ModulController>();
     return Scaffold(
-      appBar: GeneralAppBarWidget(
+      appBar: const GeneralAppBarWidget(
         title: 'Modul Latihan',
         actions: [
           // IconButton(

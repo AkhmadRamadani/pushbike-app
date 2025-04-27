@@ -14,30 +14,36 @@ String getPengumumanDataResponseModelToJson(
 
 class GetPengumumanDataResponseModel {
   List<DatumPengumumanModel>? data;
+  int? totalUnread;
 
   GetPengumumanDataResponseModel({
     this.data,
+    this.totalUnread,
   });
 
   GetPengumumanDataResponseModel copyWith({
     List<DatumPengumumanModel>? data,
+    int? totalUnread,
   }) =>
       GetPengumumanDataResponseModel(
         data: data ?? this.data,
+        totalUnread: totalUnread ?? this.totalUnread,
       );
 
   factory GetPengumumanDataResponseModel.fromJson(Map<String, dynamic> json) =>
       GetPengumumanDataResponseModel(
-        data: json["data"] == null
+        data: json["items"] == null
             ? []
             : List<DatumPengumumanModel>.from(
-                json["data"]!.map((x) => DatumPengumumanModel.fromJson(x))),
+                json["items"]!.map((x) => DatumPengumumanModel.fromJson(x))),
+        totalUnread: json["total_unread"],
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
+        "items": data == null
             ? []
             : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "total_unread": totalUnread,
       };
 }
 

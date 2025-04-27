@@ -1,5 +1,5 @@
 class AppRoutes {
-  static const String splash = '/';
+  static const String splash = '/splash';
   static const String welcome = '/welcome';
   static const String login = '/login';
   static const String onBoard = '/onBoard';
@@ -24,4 +24,14 @@ class AppRoutes {
 
   static const String profileRider = '/profile-rider';
   static const String editProfileRider = '/profile-rider/edit';
+
+  static const String detailEvent = '/detail-event';
+
+  static const String tentangKami = '/tentang-kami';
+
+  static const String ubahPassword = '/ubah-password';
+
+  static const String hubungiKami = '/hubungi-kami';
+
+  static const String perolehanPoint = '/perolehan-point';
 }

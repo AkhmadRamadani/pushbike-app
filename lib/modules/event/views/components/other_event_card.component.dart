@@ -5,30 +5,51 @@ import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
 import 'package:pushbike_app/core/constants/color_const.dart';
+import 'package:pushbike_app/core/extensions/date_extensions.dart';
+import 'package:pushbike_app/core/extensions/num_extensions.dart';
+import 'package:pushbike_app/modules/event/enums/status_kolektifitas.enum.event.dart';
+import 'package:pushbike_app/modules/event/enums/status_registered.enum.event.dart';
+import 'package:pushbike_app/modules/event/models/responses/list_event.response.model.dart';
 
 class OtherEventCardComponent extends StatelessWidget {
-  final String imageUrl;
-  final String status;
-  final String title;
-  final String location;
-  final String date;
-  final String price;
-  final String label;
+  final DatumEvent event;
   final Color statusColor;
   final Color labelBackgroundColor;
 
   const OtherEventCardComponent({
     super.key,
-    required this.imageUrl,
-    required this.status,
-    required this.title,
-    required this.location,
-    required this.date,
-    required this.price,
-    required this.label,
+    required this.event,
     this.statusColor = ColorConst.successMain,
     this.labelBackgroundColor = ColorConst.dangerSurface,
   });
+
+  StatusRegisteredEnumEvent getStatusRegistered() {
+    if (event.isRegistered ?? false) {
+      switch (event.registrationStatus) {
+        case 'pending':
+          return StatusRegisteredEnumEvent.pending;
+        case 'approved':
+          return StatusRegisteredEnumEvent.approved;
+        case 'rejected':
+          return StatusRegisteredEnumEvent.rejected;
+        default:
+          return StatusRegisteredEnumEvent.notRegistered;
+      }
+    } else {
+      return StatusRegisteredEnumEvent.notRegistered;
+    }
+  }
+
+  StatusKolektifitasEnumEvent getStatusKolektifitas() {
+    if (event.kategori == 'internal') {
+      return StatusKolektifitasEnumEvent.internal;
+    }
+    if (event.isKolektif == 1) {
+      return StatusKolektifitasEnumEvent.kolektif;
+    } else {
+      return StatusKolektifitasEnumEvent.mandiri;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,37 +78,40 @@ class OtherEventCardComponent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.r),
                     color: ColorConst.textColour10,
                     image: DecorationImage(
-                      image: NetworkImage(imageUrl),
+                      image: NetworkImage(event.foto ?? ""),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 8.h,
-                  left: 8.w,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8.w,
-                      vertical: 2.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(50.r),
-                    ),
-                    child: Row(
-                      children: [
-                        Iconify(
-                          Majesticons.check_circle,
-                          color: statusColor,
-                          size: 10.sp,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          status,
-                          style: AppTextStyles.captionLimited10Semibold
-                              .copyWith(fontSize: 8.sp),
-                        ),
-                      ],
+                Visibility(
+                  visible: event.isRegistered ?? false,
+                  child: Positioned(
+                    top: 8.h,
+                    left: 8.w,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 2.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(50.r),
+                      ),
+                      child: Row(
+                        children: [
+                          Iconify(
+                            getStatusRegistered().icon,
+                            color: getStatusRegistered().color,
+                            size: 10.sp,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            getStatusRegistered().label,
+                            style: AppTextStyles.captionLimited10Semibold
+                                .copyWith(fontSize: 8.sp),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -102,11 +126,15 @@ class OtherEventCardComponent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(
-                      title,
-                      style: AppTextStyles.body14Semibold.copyWith(
-                        color: ColorConst.textColour90,
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: Text(
+                        event.judul ?? "",
+                        style: AppTextStyles.body14Semibold.copyWith(
+                          color: ColorConst.textColour90,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Column(
@@ -120,7 +148,7 @@ class OtherEventCardComponent extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              location,
+                              event.tempatRace ?? "",
                               style: AppTextStyles.captionLimited10Regular
                                   .copyWith(
                                 color: ColorConst.textColour50,
@@ -137,7 +165,8 @@ class OtherEventCardComponent extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              date,
+                              event.tanggalRace?.toHumanReadableDateString() ??
+                                  "",
                               style: AppTextStyles.captionLimited10Regular
                                   .copyWith(
                                 color: ColorConst.textColour50,
@@ -151,7 +180,7 @@ class OtherEventCardComponent extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            price,
+                            '${event.harga?.toRupiahWithFree()}',
                             style: AppTextStyles.title16Semibold,
                           ),
                         ),
@@ -162,13 +191,16 @@ class OtherEventCardComponent extends StatelessWidget {
                             vertical: 4.h,
                           ),
                           decoration: BoxDecoration(
-                            color: labelBackgroundColor,
+                            color: getStatusKolektifitas().color,
                             borderRadius: BorderRadius.circular(50.r),
                           ),
                           child: Text(
-                            label,
+                            getStatusKolektifitas() ==
+                                    StatusKolektifitasEnumEvent.internal
+                                ? '${event.poin} Poin'
+                                : getStatusKolektifitas().labelShort,
                             style: AppTextStyles.captionLimited10Bold.copyWith(
-                              color: Colors.white,
+                              color: getStatusKolektifitas().textColor,
                             ),
                           ),
                         ),

@@ -32,7 +32,7 @@ const LocalUserDataSchema = CollectionSchema(
       id: 2,
       name: r'membership',
       type: IsarType.object,
-      target: r'LocalWaliMembership',
+      target: r'LocalRiderMembership',
     ),
     r'name': PropertySchema(
       id: 3,
@@ -79,7 +79,7 @@ const LocalUserDataSchema = CollectionSchema(
     r'LocalKomunitas': LocalKomunitasSchema,
     r'LocalRider': LocalRiderSchema,
     r'LocalRiderLevel': LocalRiderLevelSchema,
-    r'LocalWaliMembership': LocalWaliMembershipSchema
+    r'LocalRiderMembership': LocalRiderMembershipSchema
   },
   getId: _localUserDataGetId,
   getLinks: _localUserDataGetLinks,
@@ -111,7 +111,7 @@ int _localUserDataEstimateSize(
     final value = object.membership;
     if (value != null) {
       bytesCount += 3 +
-          LocalWaliMembershipSchema.estimateSize(
+          LocalRiderMembershipSchema.estimateSize(
               value, allOffsets[LocalRiderMembership]!, allOffsets);
     }
   }
@@ -168,7 +168,7 @@ void _localUserDataSerialize(
   writer.writeObject<LocalRiderMembership>(
     offsets[2],
     allOffsets,
-    LocalWaliMembershipSchema.serialize,
+    LocalRiderMembershipSchema.serialize,
     object.membership,
   );
   writer.writeString(offsets[3], object.name);
@@ -205,7 +205,7 @@ LocalUserData _localUserDataDeserialize(
     localId: id,
     membership: reader.readObjectOrNull<LocalRiderMembership>(
       offsets[2],
-      LocalWaliMembershipSchema.deserialize,
+      LocalRiderMembershipSchema.deserialize,
       allOffsets,
     ),
     name: reader.readStringOrNull(offsets[3]),
@@ -244,7 +244,7 @@ P _localUserDataDeserializeProp<P>(
     case 2:
       return (reader.readObjectOrNull<LocalRiderMembership>(
         offset,
-        LocalWaliMembershipSchema.deserialize,
+        LocalRiderMembershipSchema.deserialize,
         allOffsets,
       )) as P;
     case 3:
@@ -1507,6 +1507,11 @@ const LocalWaliSchema = Schema(
       id: 3,
       name: r'telpPapa',
       type: IsarType.string,
+    ),
+    r'waliId': PropertySchema(
+      id: 4,
+      name: r'waliId',
+      type: IsarType.long,
     )
   },
   estimateSize: _localWaliEstimateSize,
@@ -1558,6 +1563,7 @@ void _localWaliSerialize(
   writer.writeString(offsets[1], object.namaPapa);
   writer.writeString(offsets[2], object.telpMama);
   writer.writeString(offsets[3], object.telpPapa);
+  writer.writeLong(offsets[4], object.waliId);
 }
 
 LocalWali _localWaliDeserialize(
@@ -1571,6 +1577,7 @@ LocalWali _localWaliDeserialize(
     namaPapa: reader.readStringOrNull(offsets[1]),
     telpMama: reader.readStringOrNull(offsets[2]),
     telpPapa: reader.readStringOrNull(offsets[3]),
+    waliId: reader.readLongOrNull(offsets[4]),
   );
   return object;
 }
@@ -1590,6 +1597,8 @@ P _localWaliDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 3:
       return (reader.readStringOrNull(offset)) as P;
+    case 4:
+      return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -2185,6 +2194,75 @@ extension LocalWaliQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'telpPapa',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<LocalWali, LocalWali, QAfterFilterCondition> waliIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'waliId',
+      ));
+    });
+  }
+
+  QueryBuilder<LocalWali, LocalWali, QAfterFilterCondition> waliIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'waliId',
+      ));
+    });
+  }
+
+  QueryBuilder<LocalWali, LocalWali, QAfterFilterCondition> waliIdEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'waliId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LocalWali, LocalWali, QAfterFilterCondition> waliIdGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'waliId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LocalWali, LocalWali, QAfterFilterCondition> waliIdLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'waliId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LocalWali, LocalWali, QAfterFilterCondition> waliIdBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'waliId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -4432,9 +4510,9 @@ extension LocalRiderLevelQueryObject
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-const LocalWaliMembershipSchema = Schema(
-  name: r'LocalWaliMembership',
-  id: 5078473866773623100,
+const LocalRiderMembershipSchema = Schema(
+  name: r'LocalRiderMembership',
+  id: 4789820470130171752,
   properties: {
     r'harga': PropertySchema(
       id: 0,
@@ -4462,13 +4540,13 @@ const LocalWaliMembershipSchema = Schema(
       type: IsarType.string,
     )
   },
-  estimateSize: _localWaliMembershipEstimateSize,
-  serialize: _localWaliMembershipSerialize,
-  deserialize: _localWaliMembershipDeserialize,
-  deserializeProp: _localWaliMembershipDeserializeProp,
+  estimateSize: _localRiderMembershipEstimateSize,
+  serialize: _localRiderMembershipSerialize,
+  deserialize: _localRiderMembershipDeserialize,
+  deserializeProp: _localRiderMembershipDeserializeProp,
 );
 
-int _localWaliMembershipEstimateSize(
+int _localRiderMembershipEstimateSize(
   LocalRiderMembership object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -4501,7 +4579,7 @@ int _localWaliMembershipEstimateSize(
   return bytesCount;
 }
 
-void _localWaliMembershipSerialize(
+void _localRiderMembershipSerialize(
   LocalRiderMembership object,
   IsarWriter writer,
   List<int> offsets,
@@ -4514,7 +4592,7 @@ void _localWaliMembershipSerialize(
   writer.writeString(offsets[4], object.syaratKetentuan);
 }
 
-LocalRiderMembership _localWaliMembershipDeserialize(
+LocalRiderMembership _localRiderMembershipDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
@@ -4530,7 +4608,7 @@ LocalRiderMembership _localWaliMembershipDeserialize(
   return object;
 }
 
-P _localWaliMembershipDeserializeProp<P>(
+P _localRiderMembershipDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -4552,7 +4630,7 @@ P _localWaliMembershipDeserializeProp<P>(
   }
 }
 
-extension LocalWaliMembershipQueryFilter on QueryBuilder<LocalRiderMembership,
+extension LocalRiderMembershipQueryFilter on QueryBuilder<LocalRiderMembership,
     LocalRiderMembership, QFilterCondition> {
   QueryBuilder<LocalRiderMembership, LocalRiderMembership,
       QAfterFilterCondition> hargaIsNull() {
@@ -5253,5 +5331,5 @@ extension LocalWaliMembershipQueryFilter on QueryBuilder<LocalRiderMembership,
   }
 }
 
-extension LocalWaliMembershipQueryObject on QueryBuilder<LocalRiderMembership,
+extension LocalRiderMembershipQueryObject on QueryBuilder<LocalRiderMembership,
     LocalRiderMembership, QFilterCondition> {}

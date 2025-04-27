@@ -69,7 +69,7 @@ class Pembayaran {
   String? kategori;
   int? mRiderId;
   String? kelas;
-  String? nominal;
+  dynamic nominal;
   String? status;
   DateTime? updatedAt;
   DateTime? createdAt;
@@ -90,7 +90,7 @@ class Pembayaran {
     String? kategori,
     int? mRiderId,
     String? kelas,
-    String? nominal,
+    dynamic nominal,
     String? status,
     DateTime? updatedAt,
     DateTime? createdAt,

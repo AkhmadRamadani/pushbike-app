@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_conditional_rendering/conditional.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
 import 'package:pushbike_app/core/constants/asset_const.dart';
 import 'package:pushbike_app/core/constants/color_const.dart';
+
+enum PaymentCardType { selectable, unselectable }
 
 class PaymentCard extends StatelessWidget {
   final String month;
   final String amount;
   final String? lateText; // Optional for current or late payment
   final String? dateTime; // Optional for payment history
+  final bool isChecked;
+  final PaymentCardType type;
+  final Function(bool)? onTap;
 
   const PaymentCard({
     super.key,
@@ -16,7 +22,19 @@ class PaymentCard extends StatelessWidget {
     required this.amount,
     this.lateText,
     this.dateTime,
-  });
+  })  : type = PaymentCardType.unselectable,
+        onTap = null,
+        isChecked = false;
+
+  const PaymentCard.selectable({
+    super.key,
+    required this.month,
+    required this.amount,
+    this.lateText,
+    this.dateTime,
+    this.isChecked = false,
+    required this.onTap,
+  }) : type = PaymentCardType.selectable;
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +44,21 @@ class PaymentCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            Image.asset(
-              AssetConst.icCheckPembayaran,
-              width: 32.w,
+            Conditional.single(
+              context: context,
+              conditionBuilder: (context) => type == PaymentCardType.selectable,
+              widgetBuilder: (context) => Checkbox(
+                value: isChecked,
+                onChanged: (value) => onTap!(value ?? false),
+                activeColor: ColorConst.blue100,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.r),
+                ),
+              ),
+              fallbackBuilder: (context) => Image.asset(
+                AssetConst.icCheckPembayaran,
+                width: 32.w,
+              ),
             ),
             SizedBox(width: 16.w),
             Column(

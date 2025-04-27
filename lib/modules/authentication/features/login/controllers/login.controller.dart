@@ -26,6 +26,7 @@ class LoginController extends GetxController {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
+      DialogService.closeLoading();
 
       if (response.statusCode == 200 && response.data?.accessToken != null) {
         await getLoggedInUserData(response.data!.accessToken!);

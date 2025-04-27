@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:pushbike_app/core/extensions/date_extensions.dart';
+
 ListEventResponseModel listEventResponseModelFromJson(String str) =>
     ListEventResponseModel.fromJson(json.decode(str));
 
@@ -53,6 +55,8 @@ class DatumEvent {
   int? harga;
   int? poin;
   String? linkInformasi;
+  bool? isRegistered;
+  String? registrationStatus;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -70,6 +74,8 @@ class DatumEvent {
     this.harga,
     this.poin,
     this.linkInformasi,
+    this.isRegistered,
+    this.registrationStatus,
     this.createdAt,
     this.updatedAt,
   });
@@ -88,6 +94,8 @@ class DatumEvent {
     int? harga,
     int? poin,
     String? linkInformasi,
+    bool? isRegistered,
+    String? registrationStatus,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) =>
@@ -106,6 +114,8 @@ class DatumEvent {
         harga: harga ?? this.harga,
         poin: poin ?? this.poin,
         linkInformasi: linkInformasi ?? this.linkInformasi,
+        isRegistered: isRegistered ?? this.isRegistered,
+        registrationStatus: registrationStatus ?? this.registrationStatus,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
       );
@@ -116,45 +126,46 @@ class DatumEvent {
         judul: json["judul"],
         tanggalRace: json["tanggal_race"] == null
             ? null
-            : DateTime.parse(json["tanggal_race"]),
+            : DateTime.tryParse(json["tanggal_race"]),
         tempatRace: json["tempat_race"],
         isKolektif: json["is_kolektif"],
         tanggalMulaiKolektif: json["tanggal_mulai_kolektif"] == null
             ? null
-            : DateTime.parse(json["tanggal_mulai_kolektif"]),
+            : DateTime.tryParse(json["tanggal_mulai_kolektif"]),
         tanggalSelesaiKolektif: json["tanggal_selesai_kolektif"] == null
             ? null
-            : DateTime.parse(json["tanggal_selesai_kolektif"]),
-        foto: json["foto"],
+            : DateTime.tryParse(json["tanggal_selesai_kolektif"]),
+        foto: json["foto_url"],
         racePack: json["race_pack"],
         harga: json["harga"],
         poin: json["poin"],
         linkInformasi: json["link_informasi"],
+        isRegistered: json["is_registered"],
+        registrationStatus: json["registration_status"],
         createdAt: json["created_at"] == null
             ? null
-            : DateTime.parse(json["created_at"]),
+            : DateTime.tryParse(json["created_at"]),
         updatedAt: json["updated_at"] == null
             ? null
-            : DateTime.parse(json["updated_at"]),
+            : DateTime.tryParse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "kategori": kategori,
         "judul": judul,
-        "tanggal_race":
-            "${tanggalRace!.year.toString().padLeft(4, '0')}-${tanggalRace!.month.toString().padLeft(2, '0')}-${tanggalRace!.day.toString().padLeft(2, '0')}",
+        "tanggal_race": tanggalRace?.toDateString(),
         "tempat_race": tempatRace,
         "is_kolektif": isKolektif,
-        "tanggal_mulai_kolektif":
-            "${tanggalMulaiKolektif!.year.toString().padLeft(4, '0')}-${tanggalMulaiKolektif!.month.toString().padLeft(2, '0')}-${tanggalMulaiKolektif!.day.toString().padLeft(2, '0')}",
-        "tanggal_selesai_kolektif":
-            "${tanggalSelesaiKolektif!.year.toString().padLeft(4, '0')}-${tanggalSelesaiKolektif!.month.toString().padLeft(2, '0')}-${tanggalSelesaiKolektif!.day.toString().padLeft(2, '0')}",
+        "tanggal_mulai_kolektif": tanggalMulaiKolektif?.toDateString(),
+        "tanggal_selesai_kolektif": tanggalSelesaiKolektif?.toDateString(),
         "foto": foto,
         "race_pack": racePack,
         "harga": harga,
         "poin": poin,
         "link_informasi": linkInformasi,
+        "is_registered": isRegistered,
+        "registration_status": registrationStatus,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };

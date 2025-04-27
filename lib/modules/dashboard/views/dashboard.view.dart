@@ -405,7 +405,7 @@ class DashboardView extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.all(4),
                   list: data.allLevels ?? [],
-                  division: 1,
+                  division: 3,
                   onChange: (i) {},
                   page: data.currentPage ?? 0,
                 ),

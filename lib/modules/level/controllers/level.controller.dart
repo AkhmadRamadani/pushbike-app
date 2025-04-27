@@ -35,6 +35,11 @@ class LevelController extends GetxController {
     });
   }
 
+  Future<void> refreshData() async {
+     getMyLevel();
+     getRiderHistoryPoints(isRefresh: true);
+  }
+
   Future<void> getMyLevel() async {
     levelState.value = const UIState.loading();
 
@@ -88,6 +93,13 @@ class LevelController extends GetxController {
           currentPage: response.data!.currentPage,
           lastPage: response.data!.lastPage,
         ));
+
+        if (newData.isEmpty) {
+          listRiderHistoryPoints.value =
+              const UIState.empty(message: "Data Riwayat Poin Kosong");
+          pagingController.appendLastPage([]);
+          return;
+        }
       } else {
         pagingController.appendLastPage([]);
         listRiderHistoryPoints.value = UIState.error(

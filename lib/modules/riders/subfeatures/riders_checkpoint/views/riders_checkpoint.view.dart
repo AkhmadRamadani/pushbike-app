@@ -58,11 +58,19 @@ class RidersCheckpointView extends StatelessWidget {
                                 const SizedBox.shrink(),
                             itemCount: 5,
                           ),
-                          error: (message) => GeneralEmptyErrorWidget(
-                            descText: message,
+                          error: (message) => Center(
+                            child: GeneralEmptyErrorWidget(
+                              descText: message,
+                              onRefresh: () => controller
+                                  .getRiderCheckpointBasic(isRefresh: true),
+                            ),
                           ),
-                          empty: (message) => GeneralEmptyErrorWidget(
-                            descText: message,
+                          empty: (message) => Center(
+                            child: GeneralEmptyErrorWidget(
+                              descText: message,
+                              onRefresh: () => controller
+                                  .getRiderCheckpointBasic(isRefresh: true),
+                            ),
                           ),
                         ) ??
                         const SizedBox(),
@@ -72,16 +80,22 @@ class RidersCheckpointView extends StatelessWidget {
                         controller.listRiderCheckpointTestState.value
                             .whenOrNull(
                           success: (data) {
-                            return PagedListView<int, DatumRiderCheckpoint>(
-                              pagingController: controller.pagingControllerTest,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              builderDelegate: PagedChildBuilderDelegate<
-                                  DatumRiderCheckpoint>(
-                                itemBuilder: (context, item, index) {
-                                  return _buildTestDataCard(index, data: item);
-                                },
+                            return RefreshIndicator(
+                              onRefresh: () =>
+                                  controller.getRiderCheckpointTest(
+                                isRefresh: true,
+                              ),
+                              child: PagedListView<int, DatumRiderCheckpoint>(
+                                pagingController:
+                                    controller.pagingControllerTest,
+                                padding: EdgeInsets.zero,
+                                builderDelegate: PagedChildBuilderDelegate<
+                                    DatumRiderCheckpoint>(
+                                  itemBuilder: (context, item, index) {
+                                    return _buildTestDataCard(index,
+                                        data: item);
+                                  },
+                                ),
                               ),
                             );
                           },
@@ -103,11 +117,19 @@ class RidersCheckpointView extends StatelessWidget {
                                 const SizedBox.shrink(),
                             itemCount: 5,
                           ),
-                          error: (message) => GeneralEmptyErrorWidget(
-                            descText: message,
+                          error: (message) => Center(
+                            child: GeneralEmptyErrorWidget(
+                              descText: message,
+                              onRefresh: () => controller
+                                  .getRiderCheckpointTest(isRefresh: true),
+                            ),
                           ),
-                          empty: (message) => GeneralEmptyErrorWidget(
-                            descText: message,
+                          empty: (message) => Center(
+                            child: GeneralEmptyErrorWidget(
+                              descText: message,
+                              onRefresh: () => controller
+                                  .getRiderCheckpointTest(isRefresh: true),
+                            ),
                           ),
                         ) ??
                         const SizedBox(),
@@ -161,15 +183,16 @@ class RidersCheckpointView extends StatelessWidget {
   }
 
   Widget _buildAdminDataList(RidersCheckpointController controller) {
-    return PagedListView<int, DatumRiderCheckpoint>(
-      pagingController: controller.pagingControllerBasic,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.zero,
-      builderDelegate: PagedChildBuilderDelegate<DatumRiderCheckpoint>(
-        itemBuilder: (context, item, index) {
-          return _buildAdminDataCard(index, data: item);
-        },
+    return RefreshIndicator(
+      onRefresh: () => controller.getRiderCheckpointBasic(isRefresh: true),
+      child: PagedListView<int, DatumRiderCheckpoint>(
+        pagingController: controller.pagingControllerBasic,
+        padding: EdgeInsets.zero,
+        builderDelegate: PagedChildBuilderDelegate<DatumRiderCheckpoint>(
+          itemBuilder: (context, item, index) {
+            return _buildAdminDataCard(index, data: item);
+          },
+        ),
       ),
     );
   }

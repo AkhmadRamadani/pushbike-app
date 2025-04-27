@@ -8,6 +8,7 @@ class DashboardInformationSectionController extends GetxController {
 
   Rx<UIState<List<DatumPengumumanModel>>> pengumumanData =
       const UIState<List<DatumPengumumanModel>>.idle().obs;
+  RxInt unReadTotal = 0.obs;
 
   InformationRepository informationRepository = InformationRepository();
 
@@ -32,6 +33,7 @@ class DashboardInformationSectionController extends GetxController {
         } else {
           pengumumanData.value =
               UIState.success(data: response.data!.data ?? []);
+          unReadTotal.value = response.data!.totalUnread ?? 0;
         }
       } else {
         pengumumanData.value = UIState.error(

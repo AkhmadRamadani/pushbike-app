@@ -1,8 +1,15 @@
 class ApiConst {
   ApiConst._();
+  // 192.168.18.69
+  // static const String baseUrl = "http://192.168.18.69:8000/api/";
   // static const String baseUrl = "http://192.168.0.179:8000/api/";
   // 10.10.5.63
-  static const String baseUrl = "http://10.10.5.63:8000/api/";
+  // static const String baseUrl = "http://10.10.5.63:8000/api/";
+  // 10.10.4.93
+  // static const String baseUrl = "http://10.10.5.148:8000/api/";
+
+  // https://pushbikeonline.com/api
+  static const String baseUrl = "https://pushbikeonline.com/api/";
 
   static const String login = "login";
   static const String register = "register";
@@ -37,6 +44,7 @@ class ApiConst {
 
   static const String riderHistoryPoint = "rider-history-point";
   static const String indexEventMobile = "index-event-mobile";
+  static String detailEventMobile(int id) => "/detail-event-mobile/$id";
   static const String ridersCheckpointMobile = "riders-checkpoint-mobile";
   static const String assignCheckpoint = "assign-checkpoint";
 
@@ -49,4 +57,6 @@ class ApiConst {
   static String updateWaliMobile(int id) => "update-wali-mobile/$id";
   static String updateSepedaMobile(int id) => "update-sepeda-mobile/$id";
   static String dataInitial(int id) => "data-initial/$id";
+  static const String registerEventMobile = "register-event-mobile";
+  static const String changePassword = "ubah-password";
 }

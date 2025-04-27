@@ -44,14 +44,18 @@ class RaceRecapView extends StatelessWidget {
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white, size: 24),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 32.h),
-            _buildRaceSummary(controller),
-            SizedBox(height: 24.h),
-            _buildRaceHistoryList(controller),
-          ],
+      body: RefreshIndicator(
+        onRefresh: () => controller.refreshData(),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              SizedBox(height: 32.h),
+              _buildRaceSummary(controller),
+              SizedBox(height: 24.h),
+              _buildRaceHistoryList(controller),
+            ],
+          ),
         ),
       ),
     );

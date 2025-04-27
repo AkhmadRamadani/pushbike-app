@@ -5,6 +5,7 @@ import 'package:pushbike_app/modules/dashboard/views/dashboard.view.dart';
 import 'package:pushbike_app/modules/event/views/event.view.dart';
 import 'package:pushbike_app/modules/home_page/controllers/home_page.controller.dart';
 import 'package:pushbike_app/modules/home_page/views/components/home_page_navbar.component.dart';
+import 'package:pushbike_app/modules/pengaturan/views/pengaturan.view.dart';
 import 'package:pushbike_app/modules/riders/views/rider.view.dart';
 
 class HomePageView extends StatelessWidget {
@@ -34,28 +35,11 @@ class HomePageView extends StatelessWidget {
         onPageChanged: (index) {
           controller.onItemTapped(index);
         },
-        children: [
-          const DashboardView(),
-          const RiderView(),
-          const EventView(),
-          //  add logout button
-          Container(
-            color: Colors.white,
-            child: Center(
-              child: InkWell(
-                onTap: () {
-                  controller.logout();
-                },
-                child: Text(
-                  'Logout',
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
+        children: const [
+          DashboardView(),
+          RiderView(),
+          EventView(),
+          PengaturanView(),
         ],
       ),
     );

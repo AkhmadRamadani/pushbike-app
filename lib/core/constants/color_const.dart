@@ -142,4 +142,7 @@ abstract class ColorConst {
 
   // rgba(255, 255, 255, 0.5)
   static const Color backgroundProfileWhite = Color.fromRGBO(255, 255, 255, 0.5);
+
+  static const Color eventIconColor = Color(0xff387CB9);
+
 }

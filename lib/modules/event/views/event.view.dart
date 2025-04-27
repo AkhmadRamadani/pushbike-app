@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
 import 'package:pushbike_app/core/constants/color_const.dart';
+import 'package:pushbike_app/core/routes/app_routes.dart';
 import 'package:pushbike_app/core/widget/custom_tabbar_widget.dart';
 import 'package:pushbike_app/core/widget/general_app_bar_widget.dart';
 import 'package:pushbike_app/core/widget/separator_widget.dart';
 import 'package:pushbike_app/modules/event/controllers/event.controller.dart';
+import 'package:pushbike_app/modules/event/models/responses/list_event.response.model.dart';
 import 'package:pushbike_app/modules/event/views/components/other_event_card.component.dart';
 import 'package:pushbike_app/modules/event/views/components/this_month_event_card.component.dart';
 
@@ -17,18 +20,9 @@ class EventView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<EventController>();
     return Scaffold(
-      appBar: GeneralAppBarWidget(
+      appBar: const GeneralAppBarWidget(
         title: 'Event',
-        leadingIcon: const SizedBox.shrink(),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search_rounded,
-              color: Colors.white,
-            ),
-          )
-        ],
+        leadingIcon: SizedBox.shrink(),
       ),
       body: Column(
         children: [
@@ -38,49 +32,21 @@ class EventView extends StatelessWidget {
               controller: controller.tabController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
+                // External events tab.
                 _buildEventTabContent(
                   title: "Event Bulan Ini 🔥",
-                  itemCount: 5,
-                  cardBuilder: (index) => const ThisMonthEventCardComponent(
-                    imageUrl: 'https://picsum.photos/200/300',
-                    status: 'Terdaftar',
-                    title: 'Jalan Jalan',
-                    date: '20 Januari 2023',
-                    location: 'Jakarta',
-                    price: 'Rp 100.000',
-                    label: 'Kolektif',
-                  ),
-                  otherEventsBuilder: (index) => const OtherEventCardComponent(
-                    imageUrl: 'https://picsum.photos/200/300',
-                    status: 'Terdaftar',
-                    title: 'Jalan Jalan',
-                    location: 'Jakarta',
-                    date: '20 Januari 2023',
-                    price: 'Rp 100.000',
-                    label: 'Mandiri',
-                  ),
+                  monthlyPagingController:
+                      controller.pagingControllerExternalMonthly,
+                  othersPagingController:
+                      controller.pagingControllerExternalOthers,
                 ),
+                // Internal events tab.
                 _buildEventTabContent(
                   title: "Event Bulan Ini 🔥",
-                  itemCount: 5,
-                  cardBuilder: (index) => const ThisMonthEventCardComponent(
-                    imageUrl: 'https://picsum.photos/200/300',
-                    status: 'Terdaftar',
-                    title: 'Jalan Jalan',
-                    date: '20 Januari 2023',
-                    location: 'Jakarta',
-                    price: 'Rp 100.000',
-                    label: 'Kolektif',
-                  ),
-                  otherEventsBuilder: (index) => const OtherEventCardComponent(
-                    imageUrl: 'https://picsum.photos/200/300',
-                    status: 'Terdaftar',
-                    title: 'Jalan Jalan',
-                    location: 'Jakarta',
-                    date: '20 Januari 2023',
-                    price: 'Rp 100.000',
-                    label: 'Mandiri',
-                  ),
+                  monthlyPagingController:
+                      controller.pagingControllerInternalMonthly,
+                  othersPagingController:
+                      controller.pagingControllerInternalOthers,
                 ),
               ],
             ),
@@ -102,80 +68,116 @@ class EventView extends StatelessWidget {
 
   Widget _buildEventTabContent({
     required String title,
-    required int itemCount,
-    required Widget Function(int index) cardBuilder,
-    required Widget Function(int index) otherEventsBuilder,
+    required PagingController<int, DatumEvent> monthlyPagingController,
+    required PagingController<int, DatumEvent> othersPagingController,
   }) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 12.h),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 24.w,
-              vertical: 12.h,
-            ),
-            child: Text(
-              title,
-              style: AppTextStyles.title16Semibold.copyWith(
-                color: ColorConst.textColour90,
-                fontWeight: FontWeight.w600,
+    return RefreshIndicator(
+      onRefresh: () async {
+        EventController.to.getEventExternalOthersData(isRefresh: true);
+        EventController.to.getEventInternalOthersData(isRefresh: true);
+        EventController.to.getEventThisMonthExternalData(isRefresh: true);
+        EventController.to.getEventThisMonthInternalData(isRefresh: true);
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 12.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              child: Text(
+                title,
+                style: AppTextStyles.title16Semibold.copyWith(
+                  color: ColorConst.textColour90,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: double.infinity,
-            height: 0.3.sh,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: itemCount,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                    left: index == 0 ? 20.w : 0,
-                    right: 10.w,
-                  ),
-                  child: cardBuilder(index),
-                );
-              },
-            ),
-          ),
-          SizedBox(height: 36.h),
-          Separator(
-            thickness: 8.h,
-            color: ColorConst.textColour10,
-          ),
-          Column(
-            children: [
-              SizedBox(height: 12.h),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 24.w,
-                  vertical: 12.h,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Event Lainnya',
-                      style: AppTextStyles.title16Semibold.copyWith(
-                        color: ColorConst.textColour90,
-                        fontWeight: FontWeight.w600,
+            // Horizontal list for "This Month" events.
+            SizedBox(
+              width: double.infinity,
+              height: 0.33.sh,
+              child: PagedListView<int, DatumEvent>(
+                scrollDirection: Axis.horizontal,
+                pagingController: monthlyPagingController,
+                builderDelegate: PagedChildBuilderDelegate<DatumEvent>(
+                  itemBuilder: (context, item, index) => Padding(
+                    padding: EdgeInsets.only(
+                      left: index == 0 ? 20.w : 0,
+                      right: 10.w,
+                    ),
+                    child: GestureDetector(
+                      onTap: () async {
+                        await Get.toNamed(
+                          AppRoutes.detailEvent,
+                          arguments: {
+                            'eventId': item.id,
+                          },
+                        );
+
+                        EventController.to
+                            .getEventThisMonthExternalData(isRefresh: true);
+                        EventController.to
+                            .getEventThisMonthInternalData(isRefresh: true);
+                      },
+                      child: ThisMonthEventCardComponent(
+                        // Pass the fetched event to the card.
+                        event: item,
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-              ListView.builder(
-                itemCount: itemCount,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) => otherEventsBuilder(index),
+            ),
+            SizedBox(height: 36.h),
+            Separator(
+              thickness: 8.h,
+              color: ColorConst.textColour10,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Event Lainnya',
+                    style: AppTextStyles.title16Semibold.copyWith(
+                      color: ColorConst.textColour90,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
+            ),
+            // Vertical list for "Other" events.
+            PagedListView<int, DatumEvent>(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              pagingController: othersPagingController,
+              builderDelegate: PagedChildBuilderDelegate<DatumEvent>(
+                itemBuilder: (context, item, index) => GestureDetector(
+                  onTap: () async {
+                    await Get.toNamed(
+                      AppRoutes.detailEvent,
+                      arguments: {
+                        'eventId': item.id,
+                      },
+                    );
+
+                    EventController.to
+                        .getEventExternalOthersData(isRefresh: true);
+                    EventController.to
+                        .getEventInternalOthersData(isRefresh: true);
+                  },
+                  child: OtherEventCardComponent(
+                    event: item,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

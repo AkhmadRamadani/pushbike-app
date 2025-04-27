@@ -17,6 +17,7 @@ class PembayaranPayController extends GetxController {
       const UIState<DataRekening>.idle().obs;
 
   String tipe = "";
+  num? nominal;
 
   @override
   void onInit() {
@@ -27,6 +28,7 @@ class PembayaranPayController extends GetxController {
     var args = Get.arguments;
     if (args != null) {
       tipe = args['tipe'];
+      nominal = args['nominal'];
       getDataRekening(namaPembayaran: tipe);
     }
   }
@@ -64,6 +66,7 @@ class PembayaranPayController extends GetxController {
     try {
       final response = await pembayaranRepository.postPembayaran(
         kategori: tipe,
+        nominal: nominal,
       );
       if (response.statusCode == 200) {
         await toWhatsApp();

@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:pushbike_app/core/extensions/date_extensions.dart';
+
 List<GetCalendarEventResponseModel> getCalendarEventResponseFromJson(
         String str) =>
     List<GetCalendarEventResponseModel>.from(
@@ -75,8 +77,7 @@ class CalendarEvent {
       );
 
   Map<String, dynamic> toJson() => {
-        "date":
-            "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
+        "date": date?.toDateString(),
         "data": data == null
             ? []
             : List<dynamic>.from(data!.map((x) => x.toJson())),

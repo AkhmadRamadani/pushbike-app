@@ -70,12 +70,14 @@ class LocalUserData {
 
 @embedded
 class LocalWali {
+  int? waliId;
   String? namaMama;
   String? namaPapa;
   String? telpMama;
   String? telpPapa;
 
   LocalWali({
+    this.waliId,
     this.namaMama,
     this.namaPapa,
     this.telpMama,
@@ -84,6 +86,7 @@ class LocalWali {
 
   factory LocalWali.fromWali(Wali wali) {
     return LocalWali(
+      waliId: wali.id,
       namaMama: wali.namaMama,
       namaPapa: wali.namaPapa,
       telpMama: wali.telpMama,
@@ -92,6 +95,7 @@ class LocalWali {
   }
 
   Map<String, dynamic> toJson() => {
+        "waliId": waliId,
         "namaMama": namaMama,
         "namaPapa": namaPapa,
         "telpMama": telpMama,
@@ -246,5 +250,6 @@ class LocalRiderMembership {
       };
 
   // harga to num
+  @ignore
   num get hargaNum => num.tryParse(harga ?? '0') ?? 0;
 }

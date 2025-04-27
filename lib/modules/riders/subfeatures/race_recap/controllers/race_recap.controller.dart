@@ -30,6 +30,11 @@ class RaceRecapController extends GetxController {
     });
   }
 
+  Future<void> refreshData() async {
+    getIndexHasilEvent(isRefresh: true);
+    getDataRaceRecapRider();
+  }
+
   Future<void> getIndexHasilEvent({
     bool isLoadMore = false,
     bool isRefresh = false,

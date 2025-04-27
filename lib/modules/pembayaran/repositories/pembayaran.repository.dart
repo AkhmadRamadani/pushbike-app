@@ -22,7 +22,7 @@ class PembayaranRepository extends BaseRepository {
         'rider_id': localUserData?.selectedRider?.riderId,
       }),
       fromJson: (data) => GetListMembershipResponseModel.fromJson(data),
-      tag: 'JadwalRepository - getMembershipList',
+      tag: 'PembayaranRepository - getMembershipList',
     );
   }
 
@@ -37,7 +37,7 @@ class PembayaranRepository extends BaseRepository {
         'date': date.toDateString(),
       }),
       fromJson: (data) => GetLatestBillResponseModel.fromJson(data),
-      tag: 'JadwalRepository - getLatestBill',
+      tag: 'PembayaranRepository - getLatestBill',
     );
   }
 
@@ -61,7 +61,7 @@ class PembayaranRepository extends BaseRepository {
         data['data'],
         (json) => PaymentHistoryDatum.fromJson(json),
       ),
-      tag: 'JadwalRepository - getPaymentHistory',
+      tag: 'PembayaranRepository - getPaymentHistory',
     );
   }
 
@@ -78,7 +78,7 @@ class PembayaranRepository extends BaseRepository {
         },
       ),
       fromJson: (data) => GetPembayaranRekeningResponseModel.fromJson(data),
-      tag: 'JadwalRepository - getPembayaranRekening',
+      tag: 'PembayaranRepository - getPembayaranRekening',
     );
   }
 
@@ -88,6 +88,7 @@ class PembayaranRepository extends BaseRepository {
   /// return: PostPembayaranResponseModel
   Future<ResponseModelAbstraction<PostPembayaranResponseModel>> postPembayaran({
     required String kategori,
+    num? nominal,
   }) async {
     LocalUserData? localUserData = await LocalDbService.getUserLocalData();
     return makeRequest<PostPembayaranResponseModel>(
@@ -96,10 +97,11 @@ class PembayaranRepository extends BaseRepository {
         data: {
           'rider_id': localUserData?.selectedRider?.riderId,
           'kategori': kategori,
+          if (nominal != null) 'nominal': nominal
         },
       ),
       fromJson: (data) => PostPembayaranResponseModel.fromJson(data),
-      tag: 'JadwalRepository - postPembayaran',
+      tag: 'PembayaranRepository - postPembayaran',
     );
   }
 }

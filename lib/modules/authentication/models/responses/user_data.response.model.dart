@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:pushbike_app/core/extensions/date_extensions.dart';
+
 UserDataResponseModel userDataResponseModelFromJson(String str) =>
     UserDataResponseModel.fromJson(json.decode(str));
 
@@ -177,8 +179,7 @@ class Komunitas {
         "alamat": alamat,
         "logo_url": logoUrl,
         "warna_bg": warnaBg,
-        "tanggal_berlangganan":
-            "${tanggalBerlangganan!.year.toString().padLeft(4, '0')}-${tanggalBerlangganan!.month.toString().padLeft(2, '0')}-${tanggalBerlangganan!.day.toString().padLeft(2, '0')}",
+        "tanggal_berlangganan": tanggalBerlangganan?.toDateString(),
         "maksimal_rider": maksimalRider,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
@@ -498,8 +499,7 @@ class Rider {
         "nama_lengkap": namaLengkap,
         "panggilan": panggilan,
         "julukan": julukan,
-        "tanggal_lahir":
-            "${tanggalLahir!.year.toString().padLeft(4, '0')}-${tanggalLahir!.month.toString().padLeft(2, '0')}-${tanggalLahir!.day.toString().padLeft(2, '0')}",
+        "tanggal_lahir": tanggalLahir?.toDateString(),
         "domisili": domisili,
         "tinggi_badan": tinggiBadan,
         "panjang_kaki": panjangKaki,

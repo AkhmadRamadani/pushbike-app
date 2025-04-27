@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
 import 'package:pushbike_app/core/constants/color_const.dart';
 import 'package:pushbike_app/core/helpers/form_validation_helper.dart';
-import 'package:pushbike_app/core/routes/app_routes.dart';
 import 'package:pushbike_app/core/widget/auth/auth_background_stack_widget.dart';
 import 'package:pushbike_app/core/widget/auth/auth_content_widget.dart';
 import 'package:pushbike_app/core/widget/custom_input_text_widget.dart';
@@ -63,6 +62,7 @@ class LoginForm extends StatelessWidget {
                     (value) => FormValidationHelper.validateEmail(value),
                   ],
                   controller: state.emailController,
+                  textInputType: TextInputType.emailAddress,
                   onEditingComplete: () {
                     FocusScope.of(context).nextFocus();
                   }),
@@ -80,26 +80,26 @@ class LoginForm extends StatelessWidget {
                   state.submitForm();
                 },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Get.toNamed(
-                        AppRoutes.forgotPassword,
-                      );
-                    },
-                    child: Text(
-                      'Lupa Password?',
-                      style: TextStyle(
-                        color: ColorConst.blue100,
-                        fontSize: 12.sp,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     TextButton(
+              //       onPressed: () {
+              //         Get.toNamed(
+              //           AppRoutes.forgotPassword,
+              //         );
+              //       },
+              //       child: Text(
+              //         'Lupa Password?',
+              //         style: TextStyle(
+              //           color: ColorConst.blue100,
+              //           fontSize: 12.sp,
+              //           fontStyle: FontStyle.italic,
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: state.submitForm,

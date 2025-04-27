@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:pushbike_app/core/extensions/date_extensions.dart';
+
 IndexHasilEventResponseModel indexHasilEventResponseModelFromJson(String str) =>
     IndexHasilEventResponseModel.fromJson(json.decode(str));
 
@@ -230,8 +232,7 @@ class Event {
         "id": id,
         "kategori": kategori,
         "judul": judul,
-        "tanggal_race":
-            "${tanggalRace!.year.toString().padLeft(4, '0')}-${tanggalRace!.month.toString().padLeft(2, '0')}-${tanggalRace!.day.toString().padLeft(2, '0')}",
+        "tanggal_race": tanggalRace?.toDateString(),
         "tempat_race": tempatRace,
         "is_kolektif": isKolektif,
         "tanggal_mulai_kolektif": tanggalMulaiKolektif,
@@ -376,8 +377,7 @@ class Rider {
         "nama_lengkap": namaLengkap,
         "panggilan": panggilan,
         "julukan": julukan,
-        "tanggal_lahir":
-            "${tanggalLahir!.year.toString().padLeft(4, '0')}-${tanggalLahir!.month.toString().padLeft(2, '0')}-${tanggalLahir!.day.toString().padLeft(2, '0')}",
+        "tanggal_lahir": tanggalLahir?.toDateString(),
         "tahun_lahir": tahunLahir,
         "domisili": domisili,
         "tinggi_badan": tinggiBadan,

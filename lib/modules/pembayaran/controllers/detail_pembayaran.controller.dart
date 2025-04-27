@@ -22,11 +22,18 @@ class DetailPembayaranController extends GetxController {
 
   late DateTime selectedDate;
 
+  RxBool isSelected = false.obs;
+
   @override
   void onInit() {
     super.onInit();
     selectedDate = DateTime.now();
     localUserData = LocalDbService.getUserLocalDataSync();
+    getPaymentHistory();
+    getLatestBill();
+  }
+
+  Future<void> refreshData() async {
     getPaymentHistory();
     getLatestBill();
   }
@@ -47,6 +54,12 @@ class DetailPembayaranController extends GetxController {
         }
 
         paymentHistoryState.value = UIState.success(data: payments);
+
+        if (payments.isEmpty) {
+          paymentHistoryState.value = const UIState.empty(
+            message: 'Belum ada riwayat pembayaran.',
+          );
+        }
       } else {
         paymentHistoryState.value = UIState.error(
           message: response.message ?? 'Failed to fetch payment history.',

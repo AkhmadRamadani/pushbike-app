@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pushbike_app/core/constants/asset_const.dart';
-import 'package:pushbike_app/core/helpers/local_db.helper.dart';
-import 'package:pushbike_app/core/routes/app_routes.dart';
 
 class HomePageController extends GetxController {
   PageController pageController = PageController();
@@ -37,11 +35,7 @@ class HomePageController extends GetxController {
     pageController.jumpToPage(index);
   }
 
-  void logout() {
-    LocalDBHelper.clearLocalData();
-    Get.offAllNamed(AppRoutes.login);
-  }
-
+  
   @override
   void dispose() {
     pageController.dispose();

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:pushbike_app/core/routes/app_routes.dart';
 import 'package:pushbike_app/modules/authentication/features/on_board/views/on_board.view.dart';
+import 'package:pushbike_app/modules/event/views/detail_event.view.dart';
 import 'package:pushbike_app/modules/forgot_password/bindings/forgot_password_binding.dart';
 import 'package:pushbike_app/modules/forgot_password/views/forgot_password.view.dart';
 import 'package:pushbike_app/modules/home_page/bindings/home_page.binding.dart';
@@ -21,6 +22,10 @@ import 'package:pushbike_app/modules/pembayaran/views/detail_pembayaran.view.dar
 import 'package:pushbike_app/modules/pembayaran/views/pembayaran.view.dart';
 import 'package:pushbike_app/modules/pembayaran/views/pembayaran_pay.view.dart';
 import 'package:pushbike_app/modules/pembayaran/views/riwayat_pembayaran.view.dart';
+import 'package:pushbike_app/modules/pengaturan/views/subfeatures/change_password/views/change_password.view.dart';
+import 'package:pushbike_app/modules/pengaturan/views/subfeatures/hubungi_kami/views/hubungi_kami.view.dart';
+import 'package:pushbike_app/modules/pengaturan/views/subfeatures/perolehan_poin/views/perolehan_poin.view.dart';
+import 'package:pushbike_app/modules/pengaturan/views/subfeatures/tentang_kami/views/tentang_kami.view.dart';
 import 'package:pushbike_app/modules/point/controllers/point.controller.dart';
 import 'package:pushbike_app/modules/point/views/point.view.dart';
 import 'package:pushbike_app/modules/riders/subfeatures/profile_rider/views/edit_profile_rider.view.dart';
@@ -159,7 +164,30 @@ class GetPages {
       GetPage(
         name: AppRoutes.editProfileRider,
         page: () => const EditProfileRiderView(),
-      )
+      ),
+
+      GetPage(
+        name: AppRoutes.detailEvent,
+        page: () => const DetailEventView(),
+      ),
+      // tentangKami
+      GetPage(
+        name: AppRoutes.tentangKami,
+        page: () => const TentangKamiView(),
+      ),
+
+      GetPage(
+        name: AppRoutes.ubahPassword,
+        page: () => const ChangePasswordView(),  
+      ),
+      GetPage(
+        name: AppRoutes.hubungiKami,
+        page: () => const HubungiKamiView(),
+      ),
+      GetPage(
+        name: AppRoutes.perolehanPoint,
+        page: () => const PerolehanPoinView(),
+      ),
     ];
   }
 }

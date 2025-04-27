@@ -183,9 +183,6 @@ class DetailRidersCheckpointController extends GetxController {
     if (keteranganController.text.isEmpty) {
       return 'Keterangan tidak boleh kosong';
     }
-    if (waktuController.text.isEmpty) {
-      return 'Waktu tidak boleh kosong';
-    }
     if (imageFile == null) {
       return 'Bukti tidak boleh kosong';
     }
@@ -201,7 +198,7 @@ class DetailRidersCheckpointController extends GetxController {
       var res = await _ridersCheckpointRepository.postCheckpoint(
         checkpointId: data?.id ?? 0,
         keterangan: keteranganController.text,
-        waktu: int.tryParse(waktuController.text),
+        waktu: int.tryParse(waktuController.text) ?? 0,
         image: imageFile,
       );
 
@@ -210,6 +207,7 @@ class DetailRidersCheckpointController extends GetxController {
       if (res.statusCode == 200) {
         Get.back();
         RidersCheckpointController.to.getRiderCheckpointBasic(isRefresh: true);
+        RidersCheckpointController.to.getRiderCheckpointTest(isRefresh: true);
         DialogService.showDialogSuccess(
           title: 'Berhasil',
           description: 'Data berhasil disimpan',

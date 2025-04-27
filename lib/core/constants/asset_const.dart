@@ -93,4 +93,12 @@ class AssetConst {
   static const String ionImageOutline = 'assets/images/ion_image-outline.png';
   static const String photoProfileExample =
       'assets/images/photo_profile_example.jpeg';
+
+  static const String raceDummy = 'assets/images/dummies/race_dummy.png';
+
+  static const String drawSuccess = 'assets/images/draw_berhasil.png';
+
+  static const String drawQuestion = 'assets/images/draw_question.png';
+  static const String icWhatsapp = 'assets/images/ic_whatsapp.png';
+  static const String drawPoinIlustrasi = 'assets/images/draw_poin_ilustrasi.png';
 }

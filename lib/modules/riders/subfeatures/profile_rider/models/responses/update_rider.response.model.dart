@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:pushbike_app/core/extensions/date_extensions.dart';
+
 UpdateRiderResponseModel updateRiderResponseModelFromJson(String str) =>
     UpdateRiderResponseModel.fromJson(json.decode(str));
 
@@ -170,8 +172,7 @@ class Data {
         "nama_lengkap": namaLengkap,
         "panggilan": panggilan,
         "julukan": julukan,
-        "tanggal_lahir":
-            "${tanggalLahir!.year.toString().padLeft(4, '0')}-${tanggalLahir!.month.toString().padLeft(2, '0')}-${tanggalLahir!.day.toString().padLeft(2, '0')}",
+        "tanggal_lahir": tanggalLahir?.toDateString(),
         "tahun_lahir": tahunLahir,
         "domisili": domisili,
         "tinggi_badan": tinggiBadan,

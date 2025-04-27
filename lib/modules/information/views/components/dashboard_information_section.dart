@@ -33,16 +33,19 @@ class DashboardInformationSection extends StatelessWidget {
                     style: AppTextStyles.title16Regular,
                   ),
                   SizedBox(width: 8.w),
-                  // Badge(
-                  //   backgroundColor: ColorConst.dangerMain,
-                  //   label: Text(
-                  //     "2",
-                  //     style: TextStyle(
-                  //       color: Colors.white,
-                  //       fontSize: 10.sp,
-                  //     ),
-                  //   ),
-                  // ),
+                  Obx(
+                    () => Badge(
+                      backgroundColor: ColorConst.dangerMain,
+                      isLabelVisible: controller.unReadTotal.value > 0,
+                      label: Text(
+                        "${controller.unReadTotal.value}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.sp,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               const Spacer(),

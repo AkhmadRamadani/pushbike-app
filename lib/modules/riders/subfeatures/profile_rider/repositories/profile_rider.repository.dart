@@ -93,7 +93,7 @@ class ProfileRiderRepository extends BaseRepository {
     FormData formData = FormData.fromMap(diff);
     return makeRequest<UpdateRiderResponseModel>(
       apiCall: () => ApiServices.call().post(
-        ApiConst.updateWaliMobile(localUserData!.selectedRider!.riderId ?? 0),
+        ApiConst.updateWaliMobile(localUserData!.wali?.waliId ?? 0),
         data: formData,
       ),
       fromJson: (data) => UpdateRiderResponseModel.fromJson(data),
