@@ -34,6 +34,7 @@ class EventRepository extends BaseRepository {
     int limit = 5,
     DateTime? startDate,
     DateTime? endDate,
+    String? keyword,
   }) async {
     LocalUserData? localUserData = await LocalDbService.getUserLocalData();
     return makeRequest<PaginationAbstraction<DatumEvent>>(
@@ -46,6 +47,7 @@ class EventRepository extends BaseRepository {
           'limit': limit,
           if (startDate != null) 'start_date': startDate.toDateString(),
           if (endDate != null) 'end_date': endDate.toDateString(),
+          if (keyword != null) 'keyword': keyword,
         },
       ),
       fromJson: (data) => PaginationAbstraction<DatumEvent>.fromJson(

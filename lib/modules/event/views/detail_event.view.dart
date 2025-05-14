@@ -36,7 +36,9 @@ class DetailEventView extends StatelessWidget {
               return AuthBackgroundStackWidget(
                 backgroundPath: state.data?.data?.fotoUrl ?? "-",
                 width: 1.sw,
-                height: 1.sw,
+                top: 0,
+                left: 0,
+                right: 0,
               );
             },
           ),

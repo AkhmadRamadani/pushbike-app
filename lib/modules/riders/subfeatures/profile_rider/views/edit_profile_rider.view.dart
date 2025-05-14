@@ -150,6 +150,13 @@ class RiderTab extends StatelessWidget {
                 label: 'Tanggal Lahir',
                 hintText: 'YYYY-MM-DD',
                 controller: controller.riderTanggalLahirController,
+                onTap: () async {
+                  var x = await controller.showDatePickerDialog();
+                  if (x != null) {
+                    controller.riderTanggalLahirController.text =
+                        x.toString().substring(0, 10);
+                  }
+                },
               ),
               const SizedBox(height: 12),
               CustomInputTextWidget(

@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:pushbike_app/core/routes/app_routes.dart';
 import 'package:pushbike_app/modules/authentication/features/on_board/views/on_board.view.dart';
+import 'package:pushbike_app/modules/event/controllers/show_more_event.controller.dart';
 import 'package:pushbike_app/modules/event/views/detail_event.view.dart';
+import 'package:pushbike_app/modules/event/views/show_more_event.view.dart';
 import 'package:pushbike_app/modules/forgot_password/bindings/forgot_password_binding.dart';
 import 'package:pushbike_app/modules/forgot_password/views/forgot_password.view.dart';
 import 'package:pushbike_app/modules/home_page/bindings/home_page.binding.dart';
@@ -28,6 +30,7 @@ import 'package:pushbike_app/modules/pengaturan/views/subfeatures/perolehan_poin
 import 'package:pushbike_app/modules/pengaturan/views/subfeatures/tentang_kami/views/tentang_kami.view.dart';
 import 'package:pushbike_app/modules/point/controllers/point.controller.dart';
 import 'package:pushbike_app/modules/point/views/point.view.dart';
+import 'package:pushbike_app/modules/report/views/report.view.dart';
 import 'package:pushbike_app/modules/riders/subfeatures/profile_rider/views/edit_profile_rider.view.dart';
 import 'package:pushbike_app/modules/riders/subfeatures/profile_rider/views/profile_rider.view.dart';
 import 'package:pushbike_app/modules/riders/subfeatures/race_recap/views/race_recap.view.dart';
@@ -178,7 +181,7 @@ class GetPages {
 
       GetPage(
         name: AppRoutes.ubahPassword,
-        page: () => const ChangePasswordView(),  
+        page: () => const ChangePasswordView(),
       ),
       GetPage(
         name: AppRoutes.hubungiKami,
@@ -187,6 +190,19 @@ class GetPages {
       GetPage(
         name: AppRoutes.perolehanPoint,
         page: () => const PerolehanPoinView(),
+      ),
+      GetPage(
+        name: AppRoutes.report,
+        page: () => const ReportView(),
+      ),
+      GetPage(
+        name: AppRoutes.moreEvent,
+        page: () => const ShowMoreEventView(),
+        binding: BindingsBuilder(
+          () {
+            Get.put(() => ShowMoreEventController());
+          },
+        ),
       ),
     ];
   }

@@ -6,10 +6,12 @@ import 'package:pushbike_app/core/constants/app_text_styles_const.dart';
 import 'package:pushbike_app/core/constants/color_const.dart';
 import 'package:pushbike_app/core/routes/app_routes.dart';
 import 'package:pushbike_app/core/widget/custom_tabbar_widget.dart';
-import 'package:pushbike_app/core/widget/general_app_bar_widget.dart';
+import 'package:pushbike_app/core/widget/general_app_bar_search_widget.dart';
 import 'package:pushbike_app/core/widget/separator_widget.dart';
 import 'package:pushbike_app/modules/event/controllers/event.controller.dart';
+import 'package:pushbike_app/modules/event/controllers/show_more_event.controller.dart';
 import 'package:pushbike_app/modules/event/models/responses/list_event.response.model.dart';
+import 'package:pushbike_app/modules/event/repositories/event.repository.dart';
 import 'package:pushbike_app/modules/event/views/components/other_event_card.component.dart';
 import 'package:pushbike_app/modules/event/views/components/this_month_event_card.component.dart';
 
@@ -20,9 +22,21 @@ class EventView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<EventController>();
     return Scaffold(
-      appBar: const GeneralAppBarWidget(
+      appBar: GeneralAppBarSearchWidget(
         title: 'Event',
-        leadingIcon: SizedBox.shrink(),
+        leadingIcon: const SizedBox.shrink(),
+        onSearch: (p0) {
+          if (p0.isNotEmpty) {
+            Get.toNamed(
+              AppRoutes.moreEvent,
+              arguments: {
+                'eventType': EventCategory.all,
+                'keyword': p0,
+                'eventDateCategory': EventDateCategory.others,
+              },
+            );
+          }
+        },
       ),
       body: Column(
         children: [
@@ -39,6 +53,7 @@ class EventView extends StatelessWidget {
                       controller.pagingControllerExternalMonthly,
                   othersPagingController:
                       controller.pagingControllerExternalOthers,
+                  eventCategory: EventCategory.external,
                 ),
                 // Internal events tab.
                 _buildEventTabContent(
@@ -47,6 +62,7 @@ class EventView extends StatelessWidget {
                       controller.pagingControllerInternalMonthly,
                   othersPagingController:
                       controller.pagingControllerInternalOthers,
+                  eventCategory: EventCategory.internal,
                 ),
               ],
             ),
@@ -70,6 +86,7 @@ class EventView extends StatelessWidget {
     required String title,
     required PagingController<int, DatumEvent> monthlyPagingController,
     required PagingController<int, DatumEvent> othersPagingController,
+    required EventCategory eventCategory,
   }) {
     return RefreshIndicator(
       onRefresh: () async {
@@ -86,12 +103,35 @@ class EventView extends StatelessWidget {
             SizedBox(height: 12.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-              child: Text(
-                title,
-                style: AppTextStyles.title16Semibold.copyWith(
-                  color: ColorConst.textColour90,
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.title16Semibold.copyWith(
+                      color: ColorConst.textColour90,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.toNamed(
+                        AppRoutes.moreEvent,
+                        arguments: {
+                          'eventType': eventCategory,
+                          'eventDateCategory': EventDateCategory.monthly,
+                        },
+                      );
+                    },
+                    child: Text(
+                      'Lihat Semua',
+                      style: AppTextStyles.body14Regular.copyWith(
+                        color: ColorConst.blue100,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             // Horizontal list for "This Month" events.
@@ -145,6 +185,24 @@ class EventView extends StatelessWidget {
                     style: AppTextStyles.title16Semibold.copyWith(
                       color: ColorConst.textColour90,
                       fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.toNamed(
+                        AppRoutes.moreEvent,
+                        arguments: {
+                          'eventType': eventCategory,
+                          'eventDateCategory': EventDateCategory.others,
+                        },
+                      );
+                    },
+                    child: Text(
+                      'Lihat Semua',
+                      style: AppTextStyles.body14Regular.copyWith(
+                        color: ColorConst.blue100,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ],

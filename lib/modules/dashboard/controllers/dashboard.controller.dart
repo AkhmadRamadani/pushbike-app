@@ -49,6 +49,9 @@ class DashboardController extends GetxController {
     MenuModel(
       assetPath: AssetConst.icReport,
       label: "Report",
+      onTap: () {
+        Get.toNamed(AppRoutes.report);
+      },
     ),
     MenuModel(
       assetPath: AssetConst.icModul,
@@ -119,6 +122,7 @@ class DashboardController extends GetxController {
       final response = await _levelRepository.getMyLevel();
       if (response.data != null) {
         levelState.value = UIState.success(data: response.data!);
+        update(["level"]);
       } else {
         levelState.value = const UIState.error(message: 'Level data not found');
         throw Exception(response.message ?? 'Failed to fetch level data.');

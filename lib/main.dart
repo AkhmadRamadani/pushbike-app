@@ -14,13 +14,6 @@ void main() {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      // await Firebase.initializeApp(
-      //   name: 'Doctor Mobile',
-      //   options: DefaultFirebaseOptions.currentPlatform,
-      // );
-      // await Firebase.initializeApp(
-      //   options: DefaultFirebaseOptions.currentPlatform,
-      // );
 
       tz.initializeTimeZones();
 

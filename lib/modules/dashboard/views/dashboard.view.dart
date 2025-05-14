@@ -267,12 +267,11 @@ class DashboardView extends StatelessWidget {
                 const SizedBox(),
           ),
         ),
-        SizedBox(height: 12.h),
         Obx(
           () =>
               DashboardController.to.userDataState.value.whenOrNull(
                 success: (data) => CustomPaint(
-                  size: Size(140.w, 14.h),
+                  size: Size(120.w, 12.h),
                   painter: CustomDashboardEllipsePainter(),
                 ),
               ) ??
@@ -378,36 +377,41 @@ class DashboardView extends StatelessWidget {
         Obx(
           () =>
               DashboardController.to.levelState.value.whenOrNull(
-                success: (data) => CustomStepIndicatorLevelWidget(
-                  height: 28,
-                  leftMargin: 24.w,
-                  paddingLine: const EdgeInsets.symmetric(
-                    horizontal: 0,
-                  ),
-                  positiveColor: ColorConst.blue100,
-                  progressColor: ColorConst.blue100,
-                  negativeColor: ColorConst.blue20,
-                  positiveCheck: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: ColorConst.blue100,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: ColorConst.blue20,
-                        borderRadius: BorderRadius.circular(100),
+                success: (data) => GetBuilder<DashboardController>(
+                  id: "level",
+                  builder: (state) {
+                    return CustomStepIndicatorLevelWidget(
+                      height: 28,
+                      leftMargin: 24.w,
+                      paddingLine: const EdgeInsets.symmetric(
+                        horizontal: 0,
                       ),
-                    ),
-                  ),
-                  padding: const EdgeInsets.all(4),
-                  list: data.allLevels ?? [],
-                  division: 3,
-                  onChange: (i) {},
-                  page: data.currentPage ?? 0,
+                      positiveColor: ColorConst.blue100,
+                      progressColor: ColorConst.blue100,
+                      negativeColor: ColorConst.blue20,
+                      positiveCheck: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: ColorConst.blue100,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: ColorConst.blue20,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      list: data.allLevels ?? [],
+                      division: 2,
+                      onChange: (i) {},
+                      page: data.currentPage ?? 0,
+                    );
+                  },
                 ),
                 error: (error) => Text(
                   error,

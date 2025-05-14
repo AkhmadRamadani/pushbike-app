@@ -210,7 +210,8 @@ class ProfileRiderView extends StatelessWidget {
                 width: double.infinity,
                 height: 0.55.sh,
                 child: Image.network(
-                  imageUrl ?? "-",
+                  imageUrl ??
+                      "https://placehold.co/600x1200/png?text=loading....",
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;

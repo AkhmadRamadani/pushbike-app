@@ -32,8 +32,8 @@ class RaceRecapView extends StatelessWidget {
         // ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.dialog(
+        onPressed: () async {
+          await Get.dialog(
             const CustomReusableDialogWidget(
               title: 'Tambah Data Race',
               content: TambahHasilRaceDialog(),

@@ -241,12 +241,11 @@ class LevelView extends StatelessWidget {
                   ) ??
                   const SizedBox(),
             ),
-            SizedBox(height: 12.h),
             Obx(
               () =>
                   LevelController.to.levelState.value.whenOrNull(
                     success: (data) => CustomPaint(
-                      size: Size(140.w, 14.h),
+                      size: Size(120.w, 12.h),
                       painter: CustomDashboardEllipsePainter(),
                     ),
                   ) ??

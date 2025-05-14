@@ -169,7 +169,8 @@ class ModulView extends StatelessWidget {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12.r),
                                     child: Image.network(
-                                      item.thumbnail ?? "",
+                                      item.thumbnail ??
+                                          "https://placehold.co/600x400/png?text=No+Thumbnail+Available",
                                       width: double.infinity,
                                       height: 200.h,
                                       fit: BoxFit.cover,
@@ -183,9 +184,11 @@ class ModulView extends StatelessWidget {
                                       },
                                       errorBuilder:
                                           (context, error, stackTrace) {
-                                        return Icon(
-                                          Icons.broken_image,
-                                          size: 50.sp,
+                                        return Image.network(
+                                          "https://placehold.co/600x400/png?text=No+Thumbnail+Available",
+                                          width: double.infinity,
+                                          height: 200.h,
+                                          fit: BoxFit.cover,
                                         );
                                       },
                                     ),

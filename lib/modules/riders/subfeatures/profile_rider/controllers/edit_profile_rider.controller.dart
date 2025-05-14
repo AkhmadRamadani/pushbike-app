@@ -140,6 +140,17 @@ class EditProfileRiderController extends GetxController
     );
   }
 
+  // showDatePicker
+  Future<DateTime?> showDatePickerDialog() async {
+    DateTime? selectedDate = await showDatePicker(
+      context: Get.context!,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    return selectedDate;
+  }
+
   Future<File?> getImage() async {
     var res = await showModalBottomSheet<File>(
       context: Get.context!,

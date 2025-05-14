@@ -101,7 +101,7 @@ class ModulController extends GetxController {
         );
       }
     } catch (e) {
-      pagingController.appendLastPage([]);
+    pagingController.appendLastPage([]);
       listModulVideoState.value = UIState.error(message: e.toString());
     }
   }

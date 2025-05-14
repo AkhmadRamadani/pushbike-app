@@ -108,7 +108,7 @@ class DatumPengumumanModel {
         pinPengumuman: json["pin_pengumuman"],
         pushNotifikasi: json["push_notifikasi"],
         isRead: json["is_read"],
-        foto: json["foto"],
+        foto: json["foto_url"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.tryParse(json["created_at"]),

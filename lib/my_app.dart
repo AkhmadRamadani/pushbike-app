@@ -34,6 +34,14 @@ class _MyAppState extends State<MyApp> {
           ),
           initialRoute: AppRoutes.splash,
           getPages: GetPages.getPages(),
+          builder: (context, child) {
+            return GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: child,
+            );
+          },
         );
       },
     );

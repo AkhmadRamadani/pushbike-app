@@ -34,4 +34,8 @@ class AppRoutes {
   static const String hubungiKami = '/hubungi-kami';
 
   static const String perolehanPoint = '/perolehan-point';
+
+  static const String report = '/report';
+
+  static const String moreEvent = '/more-event';
 }
